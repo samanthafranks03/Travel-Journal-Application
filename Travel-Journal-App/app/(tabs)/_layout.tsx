@@ -1,4 +1,4 @@
-// app/(tabs)/_layout.js
+// app/(tabs)/_layout.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home';
@@ -9,7 +9,7 @@ import Map from '../screens/Map';
 
 const Tab = createBottomTabNavigator();
 
-const TabsLayout = () => {
+const TabsLayout: React.FC = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Home" component={Home} />

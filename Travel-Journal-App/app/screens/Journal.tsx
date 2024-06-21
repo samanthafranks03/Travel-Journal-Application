@@ -1,13 +1,14 @@
+// app/screens/Journal.tsx
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const ExploreScreen: React.FC = () => {
+const Journal: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Explore Screen</Text>
+      <Text>Journal Screen</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -17,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExploreScreen;
+export default Journal;

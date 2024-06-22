@@ -1,11 +1,11 @@
-// app/screens/NewTrips.tsx
+// app/screens/Notifications.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const NewTrips: React.FC = () => {
+const Notifications = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Feed Screen</Text>
+      <Text style={styles.text}>Notification Screen</Text>
     </View>
   );
 };
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewTrips;
+export default Notifications;

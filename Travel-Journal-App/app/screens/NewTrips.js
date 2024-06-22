@@ -1,11 +1,11 @@
-// app/screens/Profile.tsx
+// app/screens/NewTrips.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Profile: React.FC = () => {
+const NewTrips = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Profile Screen</Text>
+      <Text style={styles.text}>Feed Screen</Text>
     </View>
   );
 };
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default NewTrips;

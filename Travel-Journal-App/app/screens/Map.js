@@ -1,9 +1,9 @@
-// app/screens/Map.tsx
+// app/screens/Map.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView from 'react-native-maps';
 
-const Map: React.FC = () => {
+const Map = () => {
   return (
     <View style={styles.container}>
       <MapView
@@ -32,4 +32,3 @@ const styles = StyleSheet.create({
 });
 
 export default Map;
-

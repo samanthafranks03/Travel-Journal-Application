@@ -1,11 +1,11 @@
-// app/screens/Notifications.tsx
+// app/screens/Profile.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Notifications: React.FC = () => {
+const Profile = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Notification Screen</Text>
+      <Text style={styles.text}>Profile Screen</Text>
     </View>
   );
 };
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notifications;
+export default Profile;

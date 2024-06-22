@@ -1,8 +1,8 @@
-// app/screens/Journal.tsx
+// app/screens/Journal.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Journal: React.FC = () => {
+const Journal = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Journal Screen</Text>

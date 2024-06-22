@@ -1,4 +1,4 @@
-// app/(tabs)/_layout.tsx
+// app/tabs/_layout.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Correct import statement
@@ -10,7 +10,7 @@ import Notifications from '../screens/Notifications';
 
 const Tab = createBottomTabNavigator();
 
-const TabsLayout: React.FC = () => {
+const TabsLayout = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

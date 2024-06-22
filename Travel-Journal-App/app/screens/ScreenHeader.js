@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     title: {
         color: 'black',
         fontSize: 40,
-        fontFamily: 'Helvetica-Bold',
+        fontFamily: 'Inter-bold',
         marginLeft: windowWidth * 0.04,
     },
     container: {

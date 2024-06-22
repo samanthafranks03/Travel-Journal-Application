@@ -24,13 +24,13 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'black',
-        fontSize: 25,
-        fontFamily: 'Helvetica-Bold',
+        fontSize: 22,
+        fontFamily: 'Inter',
     
     },
     icon: {
-        color: 'black',
-        fontSize: 125,
+        color: '#77A0C6',
+        fontSize: 100,
         paddingHorizontal: 20,
 
     }

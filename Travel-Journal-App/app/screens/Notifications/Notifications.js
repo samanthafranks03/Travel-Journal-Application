@@ -1,11 +1,13 @@
 // app/screens/Notifications.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
+import NotificationsHeader from './NotificationsHeader.js'
 
 const Notifications = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Notification Screen</Text>
+      <NotificationsHeader/>
     </View>
   );
 };
@@ -13,9 +15,11 @@ const Notifications = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'white',
+    paddingTop: Constants.statusBarHeight,
   },
   text: {
     fontSize: 20,

@@ -2,11 +2,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Correct import statement
-import Journal from '../screens/Journal';
-import Map from '../screens/Map';
-import NewTrips from '../screens/NewTrips';
+import Journal from '../screens//Journal/Journal';
+import Map from '../screens/Map/Map';
+import NewTrips from '../screens/NewTrips/NewTrips';
 import Profile from '../screens/Profile';
-import Notifications from '../screens/Notifications';
+import Notifications from '../screens/Notifications/Notifications';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,14 +36,14 @@ const TabsLayout = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: '#BDBBBB',
       })}
     >
-      <Tab.Screen name="Journal" component={Journal} />
-      <Tab.Screen name="Map" component={Map} />
-      <Tab.Screen name="New Trips" component={NewTrips} />
-      <Tab.Screen name="Notifications" component={Notifications} />
+      <Tab.Screen name="Journal" component={Journal} options={{ headerShown: false }} />
+      <Tab.Screen name="Map" component={Map} options={{ headerShown: false }}/>
+      <Tab.Screen name="New Trips" component={NewTrips} options={{ headerShown: false }}/>
+      <Tab.Screen name="Notifications" component={Notifications}options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 };

@@ -1,11 +1,13 @@
 // app/screens/Journal.js
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet} from 'react-native';
+import Constants from 'expo-constants';
+import JournalHeader from './JournalHeader.js'
 
 const Journal = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Journal Screen</Text>
+      <JournalHeader/>
     </View>
   );
 };
@@ -13,9 +15,11 @@ const Journal = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'white',
+    paddingTop: Constants.statusBarHeight,
   },
   text: {
     fontSize: 20,

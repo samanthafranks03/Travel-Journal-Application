@@ -2,7 +2,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
-import HomeScreen from '../screens/HomeScreen';
 import JournalScreen from '../screens/JournalScreen';
 import RecommendationsScreen from '../screens/RecommendationsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -15,7 +14,6 @@ export default function TabsLayout() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Journal" component={JournalScreen} />
         <Tab.Screen name="Recommendations" component={RecommendationsScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />

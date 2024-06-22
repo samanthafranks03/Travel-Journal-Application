@@ -22,13 +22,13 @@ const TabsLayout: React.FC = () => {
               iconName = 'book';
               break;
             case 'Map':
-              iconName = 'list';
+              iconName = 'location-outline';
               break;
             case 'New Trips':
-              iconName = 'person';
+              iconName = 'airplane-outline';
               break;
             case 'Notifications':
-              iconName = 'map';
+              iconName = 'notifications-outline';
               break;
             default:
               iconName = 'circle';

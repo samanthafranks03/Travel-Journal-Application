@@ -2,12 +2,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import NewTripsHeader from './NewTripsHeader.js'
+import NewTripsHeader from './ScreenHeader.js'
 
 const NewTrips = () => {
   return (
     <View style={styles.container}>
-      <NewTripsHeader/>
+      <NewTripsHeader headerTitle="Travel Recs" />
     </View>
   );
 };

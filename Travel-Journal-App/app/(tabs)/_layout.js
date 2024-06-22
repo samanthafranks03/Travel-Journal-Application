@@ -2,11 +2,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Correct import statement
-import Journal from '../screens//Journal/Journal';
-import Map from '../screens/Map/Map';
-import NewTrips from '../screens/NewTrips/NewTrips';
-import Profile from '../screens/Profile';
-import Notifications from '../screens/Notifications/Notifications';
+import Journal from '../screens/Journal';
+import Map from '../screens/Map';
+import NewTrips from '../screens/NewTrips';
+import Notifications from '../screens/Notifications';
 
 const Tab = createBottomTabNavigator();
 

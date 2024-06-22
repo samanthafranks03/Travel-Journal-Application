@@ -2,12 +2,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
-import NotificationsHeader from './NotificationsHeader.js'
+import NotificationsHeader from './ScreenHeader.js'
 
 const Notifications = () => {
   return (
     <View style={styles.container}>
-      <NotificationsHeader/>
+      <NotificationsHeader headerTitle="Notifications" />
     </View>
   );
 };
@@ -20,10 +20,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingTop: Constants.statusBarHeight,
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
 });
 

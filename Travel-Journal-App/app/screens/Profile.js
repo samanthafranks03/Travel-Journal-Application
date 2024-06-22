@@ -17,10 +17,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
 });
 
 export default Profile;

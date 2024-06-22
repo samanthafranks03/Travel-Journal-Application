@@ -17,7 +17,7 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "node_modules/@types"
-  , "app/screens/Journal/Journal.js", "app/(tabs)/_layout.js", "app/screens/Profile.js", "app/screens/Notifications/Notifications.js", "app/screens/NewTrips/NewTrips.js", "app/screens/Map/Map.js"  ],
+  , "app/screens/Journal.js", "app/(tabs)/_layout.js", "app/screens/Profile.js", "app/screens/Notifications.js", "app/screens/NewTrips.js", "app/screens/Map.js"  ],
   "exclude": [
     "node_modules",
     "babel.config.js",

@@ -2,12 +2,20 @@
 import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import Constants from 'expo-constants';
-import JournalHeader from './JournalHeader.js'
+import JournalHeader from './ScreenHeader.js'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SearchBar from '../elements/SearchBar.js'
+import NewEntry from '../elements/NewEntry.js'
+
+
 
 const Journal = () => {
   return (
     <View style={styles.container}>
-      <JournalHeader/>
+      <JournalHeader headerTitle="Journal"/>
+      <SearchBar/>
+      <NewEntry/>
     </View>
   );
 };
@@ -20,10 +28,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingTop: Constants.statusBarHeight,
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
 });
 

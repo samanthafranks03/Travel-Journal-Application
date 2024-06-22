@@ -8,7 +8,8 @@
       "@screens/*": ["app/screens/*"],
       "@/*": ["./*"]
     },
-    "jsx": "react"
+    "jsx": "react",
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "include": [
     "**/*.ts",

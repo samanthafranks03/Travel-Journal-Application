@@ -11,11 +11,10 @@ const windowWidth = Dimensions.get('window').width;
 
 
 export default function ScreenHeader({headerTitle}) {
-    const navigation = useNavigation();
     return (
         <GestureHandlerRootView style={styles.container}>
             <Text style={styles.title}>{headerTitle}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
                 <Image 
                     source={require("../../assets/images/profile.png")}
                     style={styles.profileImage}

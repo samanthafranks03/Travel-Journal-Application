@@ -13,7 +13,7 @@ import NewEntry from '../elements/NewEntry.js'
 const Journal = () => {
   return (
     <View style={styles.container}>
-      <JournalHeader headerTitle="Journal"/>
+      <JournalHeader headerTitle="Journal" />
       <SearchBar/>
       <NewEntry/>
     </View>

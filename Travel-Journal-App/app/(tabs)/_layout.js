@@ -35,7 +35,7 @@ const TabsLayout = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#77A0C6',
+        tabBarActiveTintColor: '#98B6D0',
         tabBarInactiveTintColor: '#BDBBBB',
       })}
     >

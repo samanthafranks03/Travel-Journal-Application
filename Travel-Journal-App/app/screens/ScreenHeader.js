@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     title: {
         color: 'black',
         fontSize: 40,
-        fontFamily: 'Inter-bold',
+        fontFamily: 'Roboto',
         marginLeft: windowWidth * 0.04,
     },
     container: {

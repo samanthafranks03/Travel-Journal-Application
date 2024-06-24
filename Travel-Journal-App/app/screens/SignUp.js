@@ -54,12 +54,12 @@ const styles = StyleSheet.create({
   loginText: {
     color: 'black',
     fontSize: 15,
-    fontFamily: 'Inter',
+    fontFamily: 'Roboto',
   },
   inputText: {
     color: 'grey',
     fontSize: 15,
-    fontFamily: 'Inter',
+    fontFamily: 'Roboto',
   },
   inputView: {
     width:"80%",

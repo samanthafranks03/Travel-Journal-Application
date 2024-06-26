@@ -63,7 +63,7 @@ const SignUp = ({navigation}) => {
           editable={true}secureTextEntry={eyeIcon === "eye-off-outline"}/>
           <TouchableOpacity onPress = {() => {setIcon(prevIconName => prevIconName === "eye-off-outline" ? "eye-outline" : "eye-off-outline");}}>
               <Icon style={styles.icon} name={eyeIcon}/>
-            </TouchableOpacity>
+          </TouchableOpacity>
       </View>
 
     </View>
@@ -136,9 +136,6 @@ const styles = StyleSheet.create({
   icon: {
       color: 'grey',
       fontSize: 20,
-      alignSelf: 'right',
-      flexDirection: 'row',
-      justifyContent: 'space-between'
     }
 });
 

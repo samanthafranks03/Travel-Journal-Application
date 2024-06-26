@@ -3,10 +3,6 @@ import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const onPressLogout = () => {
-  // TO DO
-};
-
 const Profile = ({navigation}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

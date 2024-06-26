@@ -10,6 +10,7 @@ const SignUp = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [eyeIcon, setIcon] = useState("eye-off-outline")
   return (
     <View style={styles.container}>
     <View style={styles.content}> 
@@ -59,19 +60,15 @@ const SignUp = ({navigation}) => {
           style={styles.inputText}
           value={password}
           onChangeText={value => setPassword(value)}
-          editable={true}></TextInput>
-      </View>
-
-      <Text style={styles.text}>Confirm Password</Text>
-      <View style={styles.inputView}>
-          <TextInput 
-          style={styles.inputText}
-          editable={true}></TextInput>
+          editable={true}secureTextEntry={eyeIcon === "eye-off-outline"}/>
+          <TouchableOpacity onPress = {() => {setIcon(prevIconName => prevIconName === "eye-off-outline" ? "eye-outline" : "eye-off-outline");}}>
+              <Icon style={styles.icon} name={eyeIcon}/>
+            </TouchableOpacity>
       </View>
 
     </View>
 
-    <TouchableOpacity onPress = {() => {navigation.navigate('Tabs')}} style={styles.accountButton}>
+    <TouchableOpacity onPress = {() => {navigation.navigate('LogIn')}} style={styles.accountButton}>
           <Text style={styles.accountText}>Create Account</Text>
      </TouchableOpacity>
 
@@ -109,10 +106,12 @@ const styles = StyleSheet.create({
     width:"80%",
     backgroundColor:"#e9e9e9",
     borderRadius:20,
-    height:45,
+    height:50,
     marginBottom:20,
-    justifyContent:"center",
-    padding: 15
+    padding:15,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
   },
   signUpText: {
     flexDirection: 'row',
@@ -134,6 +133,13 @@ const styles = StyleSheet.create({
     marginBottom:10,
     alignSelf: "center"
     },
+  icon: {
+      color: 'grey',
+      fontSize: 20,
+      alignSelf: 'right',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
+    }
 });
 
 export default SignUp;

@@ -112,9 +112,6 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     padding: 15
   },
-  inputText: {
-
-  },
   logOutText:{
     color: '#BF0000',
     fontSize: 15,

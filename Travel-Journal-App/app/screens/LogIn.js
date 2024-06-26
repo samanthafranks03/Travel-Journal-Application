@@ -1,18 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import Constants from 'expo-constants';
-import {StatusBar} from 'expo-status-bar'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const LogIn = ({navigation}) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [eyeIcon, setIcon] = useState("eye-off-outline")
   return (
     <View style={styles.container}>
-        <StatusBar style="light"/>
         <View style={styles.inputView}>
-          <TextInput style={styles.inputText} placeholder="Email" placeholderTextColor="#003f5c"/>
+          <TextInput style={styles.inputText} p
+          placeholder="Email" 
+          placeholderTextColor="#003f5c"
+          value={email}
+          onChangeText={value => setEmail(value)}
+          editable={true}/>
         </View>
+
         <View style={styles.inputView}>
-          <TextInput style={styles.inputText} secureTextEntry placeholder="Password" placeholderTextColor="#003f5c"/>
+          <TextInput style={styles.inputText} 
+          placeholder="Password" 
+          placeholderTextColor="#003f5c"
+          value={password}
+          onChangeText={value => setPassword(value)}
+          editable={true}
+          secureTextEntry={eyeIcon === "eye-off-outline"}/>
+          <TouchableOpacity onPress = {() => {setIcon(prevIconName => prevIconName === "eye-off-outline" ? "eye-outline" : "eye-off-outline");}}>
+              <Icon style={styles.icon} name={eyeIcon}/>
+            </TouchableOpacity>
         </View>
+
+
         <TouchableOpacity style={styles.forgotPassButton}>
           <Text>Forgot Password?</Text>
         </TouchableOpacity>
@@ -55,8 +74,10 @@ const styles = StyleSheet.create({
     borderRadius:20,
     height:50,
     marginBottom:20,
-    justifyContent:"center",
-    padding:15
+    flexDirection: 'row',
+    padding:15,
+    justifyContent: 'space-between'
+
   },
   loginButton:{
     width:"80%",
@@ -70,6 +91,11 @@ const styles = StyleSheet.create({
     },
   signUpText: {
     flexDirection: 'row',
+  },
+  icon: {
+    color: 'grey',
+    fontSize: 20,
+    alignSelf: 'right',
   }
 });
 

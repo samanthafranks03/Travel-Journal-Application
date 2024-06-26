@@ -53,7 +53,7 @@ const Profile = ({navigation}) => {
           editable={true}></TextInput>
       </View>
 
-      <TouchableOpacity onPress = {() => {navigation.navigate('SignUp')}} style={styles.loginButton}>
+      <TouchableOpacity onPress = {() => {navigation.navigate('LogIn')}} style={styles.loginButton}>
           <Text style={styles.logOutText}>Log Out</Text>
         </TouchableOpacity>
     </View>

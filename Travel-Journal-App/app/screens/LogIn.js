@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native
 import Constants from 'expo-constants';
 import {StatusBar} from 'expo-status-bar'
 
-const SignUp = ({navigation}) => {
+const LogIn = ({navigation}) => {
   return (
     <View style={styles.container}>
         <StatusBar style="light"/>
@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SignUp;
+export default LogIn;

@@ -4,10 +4,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import NotificationsHeader from './ScreenHeader.js'
 
-const Notifications = () => {
+const Notifications = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <NotificationsHeader headerTitle="Notifications" />
+      <NotificationsHeader headerTitle="Notifications" navigation = {navigation}/>
     </View>
   );
 };

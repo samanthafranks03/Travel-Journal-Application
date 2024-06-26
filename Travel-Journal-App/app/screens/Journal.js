@@ -3,17 +3,15 @@ import React from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import Constants from 'expo-constants';
 import JournalHeader from './ScreenHeader.js'
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SearchBar from '../elements/SearchBar.js'
 import NewEntry from '../elements/NewEntry.js'
 
 
 
-const Journal = () => {
+const Journal = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <JournalHeader headerTitle="Journal" />
+      <JournalHeader headerTitle="Journal" navigation = {navigation}/>
       <SearchBar/>
       <NewEntry/>
     </View>

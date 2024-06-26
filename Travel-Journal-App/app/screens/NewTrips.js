@@ -4,10 +4,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import NewTripsHeader from './ScreenHeader.js'
 
-const NewTrips = () => {
+const NewTrips = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <NewTripsHeader headerTitle="Travel Recs" />
+      <NewTripsHeader headerTitle="Travel Recs" navigation = {navigation}/>
     </View>
   );
 };

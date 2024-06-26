@@ -1,27 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
-
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 
-
-export default function ScreenHeader({headerTitle}) {
+const ScreenHeader = ({ headerTitle, navigation}) => {
     return (
-        <GestureHandlerRootView style={styles.container}>
+        <View style={styles.container}>
             <Text style={styles.title}>{headerTitle}</Text>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
+            <TouchableOpacity onPress = {() => {navigation.navigate('Profile')}}>
                 <Image 
                     source={require("../../assets/images/profile.png")}
                     style={styles.profileImage}
                 />
             </TouchableOpacity>
-
-        </GestureHandlerRootView>
+        </View>
     );
 }
 
@@ -46,3 +38,5 @@ const styles = StyleSheet.create({
         marginRight: windowWidth * 0.04,
     }
 });
+
+export default ScreenHeader;

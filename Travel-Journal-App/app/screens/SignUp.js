@@ -3,19 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native
 import Constants from 'expo-constants';
 import {StatusBar} from 'expo-status-bar'
 
-const onPressLogin = () => {
-  // TO DO
-};
-
-  const onPressForgot = () => {
-    // TO DO
-  };
-
-  const onPressSignUp = () => {
-    // TO DO
-  };
-
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   return (
     <View style={styles.container}>
         <StatusBar style="light"/>
@@ -25,15 +13,15 @@ const SignUp = () => {
         <View style={styles.inputView}>
           <TextInput style={styles.inputText} secureTextEntry placeholder="Password" placeholderTextColor="#003f5c"/>
         </View>
-        <TouchableOpacity onPress = {onPressForgot} style={styles.forgotPassButton}>
+        <TouchableOpacity style={styles.forgotPassButton}>
           <Text>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress = {onPressLogin} style={styles.loginButton}>
+        <TouchableOpacity onPress = {() => {navigation.navigate('Tabs')}} style={styles.loginButton}>
           <Text style={styles.loginText}>LOGIN </Text>
         </TouchableOpacity>
         <View style={styles.signUpText}> 
           <Text>Don't have an account? </Text>
-          <TouchableOpacity onPress = {onPressSignUp}>
+          <TouchableOpacity >
           <Text>Sign Up</Text>
         </TouchableOpacity>
         </View>

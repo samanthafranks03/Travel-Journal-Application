@@ -21,8 +21,8 @@ const LogIn = ({navigation}) => {
         </TouchableOpacity>
         <View style={styles.signUpText}> 
           <Text>Don't have an account? </Text>
-          <TouchableOpacity >
-          <Text>Sign Up</Text>
+          <TouchableOpacity onPress = {() => {navigation.navigate('SignUp')}}>
+          <Text>Sign up</Text>
         </TouchableOpacity>
         </View>
     </View>

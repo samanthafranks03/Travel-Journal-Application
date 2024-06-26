@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, StyleSheet} from 'react-native';
 import Constants from 'expo-constants';
 import {createStackNavigator} from '@react-navigation/stack';
-import SignUp from './screens/SignUp.js'
+import SignUp from './screens/LogIn.js/index.js'
 import Profile from './screens/Profile.js'
 import Tabs from './(tabs)/_layout.js'
 import ScreenHeader from './screens/ScreenHeader.js'

@@ -1,9 +1,11 @@
-// app/screens/Map.js
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
+import { useNavigationState } from '@react-navigation/native';
 
-const Map = () => {
+const Map = ({ route }) => {
+  const entries = route.params?.entries || [];
+
   return (
     <View style={styles.container}>
       <MapView
@@ -14,7 +16,21 @@ const Map = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+      >
+        {entries.map((entry) => (
+          entry.location && (
+            <Marker
+              key={entry.id}
+              coordinate={{
+                latitude: entry.location.latitude,
+                longitude: entry.location.longitude,
+              }}
+              title={entry.name}
+              description={entry.locationName}
+            />
+          )
+        ))}
+      </MapView>
     </View>
   );
 };

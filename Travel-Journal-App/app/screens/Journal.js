@@ -107,7 +107,7 @@ const Journal = ({ navigation }) => {
               setLocationName(data.description);
             }}
             query={{
-              key: 'YOUR_GOOGLE_API_KEY', // replace with your Google API key
+              key: 'AIzaSyBw2lOAQ7hUSvyEp6WlTpgt2VcsiRgyVfg', 
               language: 'en',
             }}
             fetchDetails={true}

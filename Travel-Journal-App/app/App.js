@@ -8,6 +8,24 @@ import Profile from './screens/Profile.js'
 import Tabs from './(tabs)/_layout.js'
 import ScreenHeader from './screens/ScreenHeader.js'
 import { NavigationContainer } from '@react-navigation/native';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from 'firebase/auth';
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAnlTM5qYrY6hzimSND8E3SnuWFwtOCj38",
+  authDomain: "mad-team2-ec302.firebaseapp.com",
+  projectId: "mad-team2-ec302",
+  storageBucket: "mad-team2-ec302.appspot.com",
+  messagingSenderId: "434776608842",
+  appId: "1:434776608842:web:83f658bedb135639e6d6b3",
+  measurementId: "G-JRBRLEV6G1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 const RootStack = createStackNavigator()
 
@@ -34,4 +52,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App
+export { auth, db };
+export default App;

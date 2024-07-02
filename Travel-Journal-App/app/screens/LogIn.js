@@ -1,12 +1,38 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { auth, db } from '../App'; // Adjust the path as necessary
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 const LogIn = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [eyeIcon, setIcon] = useState("eye-off-outline")
+
+  const handleLogIn = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+  
+      // Fetch user data from Firestore
+      const docRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        console.log('User data:', docSnap.data());
+        navigation.navigate('Tabs');
+      } else {
+        console.log('No such document!');
+      }
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorMessage);
+    }
+  };
+  
   return (
     <View style={styles.container}>
         <View style={styles.inputView}>
@@ -45,7 +71,6 @@ const LogIn = ({navigation}) => {
         </TouchableOpacity>
         </View>
     </View>
-
   );
 };
 

@@ -33,7 +33,7 @@ const LogIn = ({ navigation }) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.error('Error during login:', errorCode, errorMessage);
-      alert(errorMessage);
+      alert('Incorrect Email or Password. \n Please try again.');
     }
   };
 

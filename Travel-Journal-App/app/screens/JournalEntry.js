@@ -103,13 +103,13 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 35,
     fontFamily: 'Roboto',
-    padding: 20
+    paddingLeft: 20
   },
   journalLocation: {
     color: 'black',
     fontSize: 20,
     fontFamily: 'Roboto',
-    padding: 20
+    paddingLeft: 20
   },
   //Text box
   textBox: {

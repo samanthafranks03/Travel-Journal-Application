@@ -1,47 +1,85 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, TextInput } from 'react-native';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {launchImageLibrary} from 'react-native-image-picker'
+import { launchImageLibrary } from 'react-native-image-picker';
 
-const openCamera = async() => {
-  const result = await launchImageLibrary()
-}
-export default function EntryTabBar() {
+const openCamera = async () => {
+  const result = await launchImageLibrary();
+};
+
+const EntryTabBar = () => {
+  const [textInputs, setTextInputs] = useState([]);
+
+  //Add new text box under the existing ones
+  const addNewTextBox = () => {
+    const newTextBox = (
+      <View key={textInputs.length} style={styles.textBoxContainer}>
+        {/*Text box*/}
+      <View style={styles.textBox}>
+        <TextInput
+        placeholder="Title"
+        fontSize={25}
+        />
+        <TextInput
+        placeholder="Date"
+        fontSize={18}
+        />
+        <TextInput
+        placeholder="Add text here"
+        fontSize={15}
+        multiline={true}
+        />
+      </View>
+
+      </View>
+    );
+    setTextInputs([...textInputs, newTextBox]);
+  };
+
   return (
-    <View style={styles.container}> 
-        <View style={styles.header}>
-        {/*Font*/}
-        <TouchableOpacity > 
-        <MIcon size = {20} name="text-fields"/>
-        </TouchableOpacity> 
+    <View style={styles.container}>
+        {/* Render text inputs */}
+        {textInputs.map((textInput, index) => (
+        <View key={index}>{textInput}</View>
+      ))}
 
-        {/*Color*/}
-        <TouchableOpacity > 
-        <MIcon size = {20} name="format-color-text" />
-        </TouchableOpacity> 
+      <View style={styles.header}>
+        {/* Font */}
+        <TouchableOpacity>
+          <MIcon size={20} name="text-fields" />
+        </TouchableOpacity>
 
-        {/*Add text box*/}
-        <TouchableOpacity > 
-        <MIcon size = {40} name="add-circle-outline"/>
-        </TouchableOpacity> 
+        {/* Color */}
+        <TouchableOpacity>
+          <MIcon size={20} name="format-color-text" />
+        </TouchableOpacity>
 
-        {/*Sticker*/}
-        <TouchableOpacity > 
-        <MCIcon size = {20} name="sticker-emoji" />
-        </TouchableOpacity> 
+        {/* Add text box */}
+        <TouchableOpacity onPress={() => {
+          addNewTextBox();
 
-        {/*Image Upload*/}
+        }}>
+          <MIcon size={40} name="add-circle-outline" />
+        </TouchableOpacity>
+
+        {/* Sticker */}
+        <TouchableOpacity>
+          <MCIcon size={20} name="sticker-emoji" />
+        </TouchableOpacity>
+
+        {/* Image Upload */}
         <TouchableOpacity onPress={openCamera}>
-            <MCIcon size = {20} name='image-outline' /> 
+          <MCIcon size={20} name='image-outline' />
         </TouchableOpacity>
       </View>
+
+
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -51,25 +89,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 40,
-  
-
   },
-  //Back button
-  icon: {
-    alignItems: 'left',
-    justifyContent: 'left'
-  },
-  //Save button
-  saveButton: {
-    backgroundColor: '#e9e9e9',
-    borderRadius: 25,
-    height: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 15,
-  },
-  saveText: {
-    textAlign: 'center',
-    height: 20,
-  },
+    //Text box
+    textBox: {
+      backgroundColor: 'grey',
+      borderWidth: 20,
+      borderColor: 'white',
+      height: 200,
+      padding: 15,
+      flexGrow: 1,
+      borderRadius: 40
+    },
+    textBoxContainer: {
+      marginBottom: 10, // Adjust this value as needed for spacing between text boxes
+    },
 });
+
+export default EntryTabBar;

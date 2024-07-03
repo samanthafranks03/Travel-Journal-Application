@@ -1,6 +1,6 @@
 // app/screens/NewTrips.js
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
 import EntryTabBar from '../elements/EntryTabBar.js';
@@ -36,6 +36,25 @@ const JournalEntry = ({navigation, route}) => {
         <Text style={styles.journalLocation}>{locationName}</Text>
       </View>
 
+      {/*Text box*/}
+      <View style={styles.textBox}>
+        <TextInput
+        placeholder="Title"
+        fontSize={25}
+        />
+        <TextInput
+        placeholder="Date"
+        fontSize={18}
+        />
+        <TextInput
+        placeholder="Add text here"
+        fontSize={15}
+        multiline={true}
+        />
+      </View>
+
+
+      {/*Options tab*/}
       <EntryTabBar/>
     </View>
   );
@@ -46,7 +65,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'center',
     backgroundColor: 'white',
     paddingTop: Constants.statusBarHeight,
   },
@@ -85,12 +103,24 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 35,
     fontFamily: 'Roboto',
+    padding: 20
   },
   journalLocation: {
     color: 'black',
     fontSize: 20,
     fontFamily: 'Roboto',
+    padding: 20
   },
+  //Text box
+  textBox: {
+    backgroundColor: 'grey',
+    borderWidth: 20,
+    borderColor: 'white',
+    height: 20,
+    padding: 15,
+    flexGrow: 1,
+    borderRadius: 40
+  }
 });
 
 export default JournalEntry;

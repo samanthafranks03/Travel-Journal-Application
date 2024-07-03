@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import MIcon from 'react-native-vector-icons/MaterialIcons';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {launchImageLibrary} from 'react-native-image-picker'
 
+const openCamera = async() => {
+  const result = await launchImageLibrary()
+}
 export default function EntryTabBar() {
   return (
     <View style={styles.container}> 
@@ -12,7 +15,6 @@ export default function EntryTabBar() {
         <TouchableOpacity > 
         <MIcon size = {20} name="text-fields"/>
         </TouchableOpacity> 
-    
 
         {/*Color*/}
         <TouchableOpacity > 
@@ -30,7 +32,7 @@ export default function EntryTabBar() {
         </TouchableOpacity> 
 
         {/*Image Upload*/}
-        <TouchableOpacity style={styles.collabButton}>
+        <TouchableOpacity onPress={openCamera}>
             <MCIcon size = {20} name='image-outline' /> 
         </TouchableOpacity>
       </View>

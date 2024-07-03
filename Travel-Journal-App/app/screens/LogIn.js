@@ -1,10 +1,10 @@
 // Travel-Journal-App/app/screens/LogIn.js
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auth, db } from '../App'; 
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore';
 
 const LogIn = ({ navigation }) => {
@@ -57,6 +57,37 @@ const LogIn = ({ navigation }) => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!input) {
+      Alert.alert("Error", "Please enter your email or username.");
+      return;
+    }
+
+    try {
+      let email = input;
+
+      if (!isEmail(input)) {
+        // Fetch email using username
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('username', '==', input));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          throw new Error('No user found with the provided username.');
+        }
+
+        const userDoc = querySnapshot.docs[0];
+        email = userDoc.data().email;
+      }
+
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert("Success", "Password reset email has been sent.");
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      Alert.alert("Error", error.message);
+    }
+  };
+
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -86,7 +117,7 @@ const LogIn = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.forgotPassButton}>
+        <TouchableOpacity style={styles.forgotPassButton} onPress={handleForgotPassword}>
           <Text>Forgot Password?</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleLogIn} style={styles.loginButton}>
@@ -151,6 +182,9 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: 20,
     alignSelf: 'center',
+  },
+  forgotPassButton: {
+    marginBottom: 20,
   }
 });
 

@@ -139,9 +139,10 @@ const Journal = ({ navigation }) => {
             )}
           </MapView>
           {editingEntry && (<TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText} onPress = {() => {navigation.navigate('JournalEntry')}}>{editingEntry ? "Open Entry" : ""}</Text>
+            {/*Pass entry name and location to journal entry screen*/}
+            <Text style={styles.buttonText} onPress = {() => {navigation.navigate('JournalEntry', { entryName, locationName });}}>{editingEntry ? "Open Entry" : ""}</Text>
           </TouchableOpacity>)}
-          <TouchableOpacity style={styles.button} onPress={addOrEditEntry}>
+          <TouchableOpacity style={styles.button} onPress={addOrEditEntry} >
             <Text style={styles.buttonText}>{editingEntry ? "Save Changes" : "Save Entry"}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}>

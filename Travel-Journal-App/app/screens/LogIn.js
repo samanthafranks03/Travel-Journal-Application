@@ -1,18 +1,40 @@
+// Travel-Journal-App/app/screens/LogIn.js
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { auth, db } from '../App'; // Adjust the path as necessary
+import { auth, db } from '../App'; 
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, query, where, collection, getDocs } from 'firebase/firestore';
 
 const LogIn = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+  const [input, setInput] = useState("");
   const [password, setPassword] = useState("");
   const [eyeIcon, setIcon] = useState("eye-off-outline");
 
+  const isEmail = (input) => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    return emailRegex.test(input);
+  };
+
   const handleLogIn = async () => {
     try {
+      let email = input;
+
+      if (!isEmail(input)) {
+        // Fetch email using username
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('username', '==', input));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          throw new Error('No user found with the provided username.');
+        }
+
+        const userDoc = querySnapshot.docs[0];
+        email = userDoc.data().email;
+      }
+
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('User logged in:', user);
@@ -30,10 +52,8 @@ const LogIn = ({ navigation }) => {
         navigation.navigate('Profile'); // Navigate to profile setup page if needed
       }
     } catch (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error('Error during login:', errorCode, errorMessage);
-      alert('Incorrect Email or Password. \n Please try again.');
+      console.error('Error during login:', error);
+      alert(error.message.includes('No user found') ? 'Incorrect Username or Password. Please try again.' : 'Incorrect Email or Password. Please try again.');
     }
   };
 
@@ -43,10 +63,10 @@ const LogIn = ({ navigation }) => {
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
-            placeholder="Email"
+            placeholder="Email or Username"
             placeholderTextColor="#003f5c"
-            value={email}
-            onChangeText={value => setEmail(value)}
+            value={input}
+            onChangeText={value => setInput(value)}
             editable={true}
           />
         </View>

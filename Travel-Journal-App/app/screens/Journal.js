@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, FlatList, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import JournalHeader from './ScreenHeader.js';
 import SearchBar from '../elements/SearchBar.js';
 import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {FlatList} from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -15,6 +16,7 @@ const Journal = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [locationName, setLocationName] = useState('');
   const [editingEntry, setEditingEntry] = useState(null);
+  const [search, setSearch] = useState('');
 
   const generateUniqueName = (name, excludeId = null) => {
     let uniqueName = name;
@@ -72,10 +74,11 @@ const Journal = ({ navigation }) => {
     </TouchableOpacity>
   ), []);
 
+  
   return (
     <View style={styles.container}>
       <JournalHeader headerTitle="Journal" navigation={navigation} />
-      <SearchBar />
+      <SearchBar onChangeText={(text) => {setSearch(text)}} value={search}/>
       <NewEntry openModal={() => setModalVisible(true)} />
       <FlatList
         data={entries}
@@ -135,6 +138,9 @@ const Journal = ({ navigation }) => {
               />
             )}
           </MapView>
+          {editingEntry && (<TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText} onPress = {() => {navigation.navigate('JournalEntry')}}>{editingEntry ? "Open Entry" : ""}</Text>
+          </TouchableOpacity>)}
           <TouchableOpacity style={styles.button} onPress={addOrEditEntry}>
             <Text style={styles.buttonText}>{editingEntry ? "Save Changes" : "Save Entry"}</Text>
           </TouchableOpacity>
@@ -149,13 +155,14 @@ const Journal = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
     paddingTop: Constants.statusBarHeight,
+    flex: 1
   },
   entryList: {
-    paddingTop: 20,
+    paddingTop: 150,
     paddingBottom: 20,
+    flexGrow: 1
   },
   entry: {
     flexDirection: 'row',

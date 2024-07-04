@@ -34,7 +34,7 @@ const EntryTabBar = () => {
 
       </View>
     );
-    setTextInputs([...textInputs, newTextBox]);
+    setTextInputs([newTextBox, ...textInputs]);
   };
 
   return (
@@ -99,9 +99,6 @@ const styles = StyleSheet.create({
       padding: 15,
       flexGrow: 1,
       borderRadius: 40
-    },
-    textBoxContainer: {
-      marginBottom: 10, // Adjust this value as needed for spacing between text boxes
     },
 });
 

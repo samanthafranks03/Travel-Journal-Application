@@ -41,13 +41,14 @@ const JournalEntry = ({ navigation, route }) => {
     setTextColor(color);
   };
 
-  const addSticker = (icon, color) => {
-    setStickers([...stickers, { icon, color }]);
+  const addSticker = (icon) => {
+    setStickers([...stickers, { icon}]);
   };
 
   const addImage = (uri) => {
     setImages([...images, uri]);
   };
+
 
   const addNewTextBox = () => {
     const newTextBox = (
@@ -113,7 +114,7 @@ const JournalEntry = ({ navigation, route }) => {
       {/* Render stickers */}
       <View style={styles.stickerContainer}>
         {stickers.map((sticker, index) => (
-          <MaterialCommunityIcons key={index} name={sticker.icon} size={40} color={sticker.color} style={styles.sticker} />
+          <Image key={index} source={sticker.icon} style={styles.sticker} />
         ))}
       </View>
 
@@ -239,6 +240,8 @@ const styles = StyleSheet.create({
   },
   sticker: {
     margin: 5,
+    width: 50,
+    height: 50
   },
   imageContainer: {
     flexDirection: 'row',

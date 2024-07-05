@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, ScrollView} from 'react-native';
 import Constants from 'expo-constants';
 import JournalHeader from './ScreenHeader.js';
 import SearchBar from '../elements/SearchBar.js';
@@ -30,6 +30,10 @@ const Journal = ({ navigation }) => {
     }
     return uniqueName;
   };
+
+  const updateSearch = (search) => {
+      setSearch
+  }
 
   const addOrEditEntry = () => {
     if (entryName.trim() === '') {
@@ -79,8 +83,10 @@ const Journal = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <JournalHeader headerTitle="Journal" navigation={navigation} />
-      <SearchBar onChangeText={(text) => { setSearch(text) }} value={search} />
-      <NewEntry openModal={() => setModalVisible(true)} />
+      <SearchBar onChangeText={updateSearch} value={search} />
+      <View style={styles.newEntryButton} > 
+        <NewEntry openModal={() => setModalVisible(true)} />
+        </View>
       <FlatList
         data={entries}
         renderItem={renderItem}
@@ -174,7 +180,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingLeft: 18,
-    marginTop: 10,
+    marginTop: 150,
     marginHorizontal: 20, // Add horizontal margins to center the entries
   },
   entryIcon: {
@@ -250,7 +256,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#c3c3c3',
     padding: 10,
-    borderRadius: 18,
+    borderRadius: 10,
     marginVertical: 5,
     width: '100%',
     alignItems: 'center',
@@ -260,6 +266,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Roboto',
   },
+  newEntryButton: {
+  }
 });
 
 export default Journal;

@@ -14,7 +14,7 @@ export default function NewEntry({ openModal }) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 20,
     paddingVertical: 15,
     backgroundColor: '#e0e0e0',

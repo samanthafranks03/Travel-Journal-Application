@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView, Image} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -64,9 +64,42 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
     addImage(uri);
   };
 
+  
   const icons = [
-    'star', 'heart', 'thumb-up', 'thumb-down', 'check-circle', 'close-circle', 'alert-circle', 'information', 'camera', 'flag', 'music-note', 'tag', 'trophy'
+    require('../../assets/icons/travel.png'),
+    require('../../assets/icons/airplane.png'),
+    require('../../assets/icons/tickets.png'),
+    require('../../assets/icons/luggage.png'),
+    require('../../assets/icons/map.png'),
+    require('../../assets/icons/postcard.png'),
+    require('../../assets/icons/roadtrip.png'),
+    require('../../assets/icons/beach.png'),
+    require('../../assets/icons/palm-tree.png'),
+    require('../../assets/icons/drink.png'),
+    require('../../assets/icons/surf.png'),
+    require('../../assets/icons/sailboat.png'),
+    require('../../assets/icons/cruise.png'),
+    require('../../assets/icons/desert.png'),
+    require('../../assets/icons/camping.png'),
+    require('../../assets/icons/campfire.png'),
+    require('../../assets/icons/sign-post.png'),
+    require('../../assets/icons/hiking.png'),
+    require('../../assets/icons/mountain.png'),
+    require('../../assets/icons/lake.png'),
+    require('../../assets/icons/ski.png'),
+    require('../../assets/icons/snowboard.png'),
+    require('../../assets/icons/shopping.png'),
+    require('../../assets/icons/city.png'),
+    require('../../assets/icons/art.png'),
+    require('../../assets/icons/monument.png'),
+    require('../../assets/icons/market.png'),
+    require('../../assets/icons/restaurant.png'),
+    require('../../assets/icons/cheers.png'),
+    require('../../assets/icons/confetti.png'),
+    require('../../assets/icons/sun.png'),
+    require('../../assets/icons/snow.png'),
   ];
+
 
   return (
     <View style={styles.container}>
@@ -121,6 +154,9 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
           <View style={styles.buttonContainer}>
             <Button title="Select Color" onPress={handleColorSelect} color="#6200EE" />
           </View>
+          <View style={styles.buttonContainer}>
+            <Button title="Cancel" onPress={() => {setColorModalVisible(false)}} color="#6200EE" />
+          </View>
         </View>
       </Modal>
 
@@ -148,6 +184,9 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
           <View style={styles.buttonContainer}>
             <Button title="Select Text Color" onPress={handleTextColorSelect} color="#6200EE" />
           </View>
+          <View style={styles.buttonContainer}>
+            <Button title="Cancel" onPress={() => {setTextColorModalVisible(false)}} color="#6200EE" />
+          </View>
         </View>
       </Modal>
 
@@ -166,29 +205,18 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
                 style={styles.iconContainer}
                 onPress={() => setSelectedIcon(icon)}
               >
-                <MaterialCommunityIcons
-                  name={icon}
-                  size={40}
-                  color={selectedIcon === icon ? selectedStickerColor : 'black'}
+                <Image
+                  source={icon}
+                  style={{ width: 70, height: 70, }}
                 />
               </TouchableOpacity>
             ))}
           </ScrollView>
-          <ColorPicker
-            ref={r => { this.picker = r }}
-            color={selectedStickerColor}
-            onColorChange={handleStickerColorChange}
-            thumbSize={40}
-            sliderSize={40}
-            noSnap={true}
-            row={false}
-            wheelLodingIndicator={<ActivityIndicator size={40} />}
-            sliderLodingIndicator={<ActivityIndicator size={20} />}
-            useNativeDriver={false}
-            useNativeLayout={false}
-          />
           <View style={styles.buttonContainer}>
             <Button title="Select Sticker" onPress={handleStickerSelect} color="#6200EE" />
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button title="Cancel" onPress={() => {setStickerModalVisible(false)}} color="#6200EE" />
           </View>
         </View>
       </Modal>
@@ -215,7 +243,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 10,
     width: '100%',
     paddingHorizontal: 40,
   },

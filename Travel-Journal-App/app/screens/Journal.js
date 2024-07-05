@@ -75,7 +75,7 @@ const Journal = ({ navigation }) => {
 
   const renderItem = useCallback(({ item }) => (
     <TouchableOpacity style={styles.entry} onPress={() => editEntry(item)}>
-      <Icon name='book' size={30} color='black' style={styles.entryIcon} />
+      <Icon name='book' size={45} color='black' style={styles.entryIcon} />
       <Text style={styles.entryText}>{item.name}</Text>
     </TouchableOpacity>
   ), []);
@@ -175,20 +175,20 @@ const styles = StyleSheet.create({
   entryList: {
   },
   entry: {
-    backgroundColor: '#f9f9f9',
+    backgroundColor: 'white',
     borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
     paddingLeft: 18,
-    marginTop: 10,
+    marginTop: 20,
     marginHorizontal: 20, // Add horizontal margins to center the entries
   },
   entryIcon: {
     marginRight: 10,
   },
   entryText: {
-    fontSize: 22,
+    fontSize: 25,
     fontFamily: 'Roboto',
     color: 'black',
   },

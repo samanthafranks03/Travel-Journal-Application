@@ -1,6 +1,7 @@
 // app/tabs/_layout.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Correct import statement
 import Journal from '../screens/Journal';
 import Map from '../screens/Map';
@@ -11,8 +12,11 @@ const Tab = createBottomTabNavigator();
 
 const TabsLayout = () => {
   return (
-    <Tab.Navigator
+       <Tab.Navigator 
       screenOptions={({ route }) => ({
+        tabBarStyle: {
+          position: 'absolute',
+        },
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
@@ -44,7 +48,9 @@ const TabsLayout = () => {
       <Tab.Screen name="New Trips" component={NewTrips} options={{ headerShown: false }}/>
       <Tab.Screen name="Notifications" component={Notifications}options={{ headerShown: false }} />
     </Tab.Navigator>
+   
   );
 };
+
 
 export default TabsLayout;

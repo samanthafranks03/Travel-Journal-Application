@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
 import EntryTabBar from '../elements/EntryTabBar.js';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const JournalEntry = ({navigation, route}) => {
+const JournalEntry = ({ navigation, route }) => {
   // Get entry name and location as parameters
   const { entryName, locationName } = route.params;
 
-  // State for modal visibility, username input, and list of collaborators
+  // State for visibility, username input, and collaborators
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [collaborators, setCollaborators] = useState([]);
+  const [textInputs, setTextInputs] = useState([]);
+  const [textBoxColor, setTextBoxColor] = useState('grey');
+  const [textColor, setTextColor] = useState('black');
+  const [stickers, setStickers] = useState([]);
+  const [images, setImages] = useState([]);
 
   const handleAddCollaborator = () => {
     if (username.trim()) {
@@ -26,18 +32,65 @@ const JournalEntry = ({navigation, route}) => {
     </View>
   );
 
+  // Functions to handle color and sticker changes
+  const changeTextBoxColor = (color) => {
+    setTextBoxColor(color);
+  };
+
+  const changeTextColor = (color) => {
+    setTextColor(color);
+  };
+
+  const addSticker = (icon, color) => {
+    setStickers([...stickers, { icon, color }]);
+  };
+
+  const addImage = (uri) => {
+    setImages([...images, uri]);
+  };
+
+  const addNewTextBox = () => {
+    const newTextBox = (
+      <View key={textInputs.length} style={styles.textBoxContainer}>
+        {/* Text box */}
+        <View style={[styles.textBox, { backgroundColor: textBoxColor }]}>
+          <TextInput
+            placeholder="Title"
+            fontSize={25}
+            placeholderTextColor={textColor}
+            style={{ color: textColor }}
+          />
+          <TextInput
+            placeholder="Date"
+            fontSize={18}
+            placeholderTextColor={textColor}
+            style={{ color: textColor }}
+          />
+          <TextInput
+            placeholder="Add text here"
+            fontSize={15}
+            multiline={true}
+            placeholderTextColor={textColor}
+            style={{ color: textColor }}
+          />
+        </View>
+      </View>
+    );
+    setTextInputs([newTextBox, ...textInputs]);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         {/* Back button */}
-        <TouchableOpacity onPress={() => { navigation.navigate('Journal') }}> 
-          <Icon style={styles.icon} size={18} name='chevron-back-outline' /> 
-        </TouchableOpacity> 
+        <TouchableOpacity onPress={() => { navigation.navigate('Journal') }}>
+          <Ionicons style={styles.icon} size={18} name='chevron-back-outline' />
+        </TouchableOpacity>
 
         <View style={{ flex: 1 }} />
         {/* Add collaborators button */}
         <TouchableOpacity style={styles.collabButton} onPress={() => setModalVisible(true)}>
-          <Icon style={styles.icon} size={18} paddingRight={15} name='person-add-outline' /> 
+          <Ionicons style={styles.icon} size={18} paddingRight={15} name='person-add-outline' />
         </TouchableOpacity>
 
         {/* Save button */}
@@ -45,34 +98,42 @@ const JournalEntry = ({navigation, route}) => {
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>
-      
+
       {/* Display entry name and location */}
       <View>
         <Text style={styles.journalName}>{entryName}</Text>
         <Text style={styles.journalLocation}>{locationName}</Text>
       </View>
 
-      {/* Text box */}
-      <View style={styles.textBox}>
-        <TextInput
-          placeholder="Title"
-          fontSize={25}
-        />
-        <TextInput
-          placeholder="Date"
-          fontSize={18}
-        />
-        <TextInput
-          placeholder="Add text here"
-          fontSize={15}
-          multiline={true}
-        />
+      {/* Render text inputs */}
+      {textInputs.map((textInput, index) => (
+        <View key={index}>{textInput}</View>
+      ))}
+
+      {/* Render stickers */}
+      <View style={styles.stickerContainer}>
+        {stickers.map((sticker, index) => (
+          <MaterialCommunityIcons key={index} name={sticker.icon} size={40} color={sticker.color} style={styles.sticker} />
+        ))}
+      </View>
+
+      {/* Render images */}
+      <View style={styles.imageContainer}>
+        {images.map((uri, index) => (
+          <Image key={index} source={{ uri }} style={styles.image} />
+        ))}
       </View>
 
       {/* Options tab */}
-      <EntryTabBar/>
+      <EntryTabBar
+        changeTextBoxColor={changeTextBoxColor}
+        changeTextColor={changeTextColor}
+        addSticker={addSticker}
+        addNewTextBox={addNewTextBox}
+        addImage={addImage}
+      />
 
-      {/* Add Collaborator Modal */}
+      {/* Add Collaborator */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -83,10 +144,8 @@ const JournalEntry = ({navigation, route}) => {
       >
         <View style={styles.modalView}>
           <View style={styles.close}>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-            >
-              <Icon name="close-outline" size={20}  />
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Ionicons name="close-outline" size={20} />
             </TouchableOpacity>
           </View>
           <Text style={styles.modalText}>Add Collaborators</Text>
@@ -134,12 +193,10 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: 'space-between',
   },
-  // Back button
   icon: {
     alignItems: 'left',
-    justifyContent: 'left'
+    justifyContent: 'left',
   },
-  // Save button
   saveButton: {
     backgroundColor: '#e9e9e9',
     borderRadius: 25,
@@ -152,30 +209,47 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     height: 20,
   },
-  // Name and location
   journalName: {
     color: 'black',
     fontSize: 35,
     fontFamily: 'Roboto',
-    paddingLeft: 20
+    paddingLeft: 20,
   },
   journalLocation: {
     color: 'black',
     fontSize: 20,
     fontFamily: 'Roboto',
-    paddingLeft: 20
+    paddingLeft: 20,
   },
-  // Text box
+  textBoxContainer: {
+    padding: 10,
+  },
   textBox: {
-    backgroundColor: 'grey',
     borderWidth: 20,
     borderColor: 'white',
-    height: 20,
+    height: 200,
     padding: 15,
     flexGrow: 1,
-    borderRadius: 40
+    borderRadius: 40,
   },
-  // Modal
+  stickerContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    margin: 10,
+  },
+  sticker: {
+    margin: 5,
+  },
+  imageContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    margin: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    margin: 5,
+  },
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -211,7 +285,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonSave: {
-    backgroundColor: "#98B6D0",
+    backgroundColor: "black",
   },
   textStyle: {
     color: 'white',
@@ -229,7 +303,7 @@ const styles = StyleSheet.create({
   },
   close: {
     alignSelf: 'flex-end',
-  }
+  },
 });
 
 export default JournalEntry;

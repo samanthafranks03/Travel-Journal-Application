@@ -1,13 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import JournalHeader from './ScreenHeader.js';
 import SearchBar from '../elements/SearchBar.js';
 import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {FlatList} from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Slider from '@react-native-community/slider';
+
 
 const Journal = ({ navigation }) => {
   const [entries, setEntries] = useState([]);
@@ -69,16 +71,15 @@ const Journal = ({ navigation }) => {
 
   const renderItem = useCallback(({ item }) => (
     <TouchableOpacity style={styles.entry} onPress={() => editEntry(item)}>
-      <Icon name='book' size={100} color='#77A0C6' style={styles.entryIcon} />
+      <Icon name='book' size={30} color='black' style={styles.entryIcon} />
       <Text style={styles.entryText}>{item.name}</Text>
     </TouchableOpacity>
   ), []);
 
-  
   return (
     <View style={styles.container}>
       <JournalHeader headerTitle="Journal" navigation={navigation} />
-      <SearchBar onChangeText={(text) => {setSearch(text)}} value={search}/>
+      <SearchBar onChangeText={(text) => { setSearch(text) }} value={search} />
       <NewEntry openModal={() => setModalVisible(true)} />
       <FlatList
         data={entries}
@@ -102,25 +103,27 @@ const Journal = ({ navigation }) => {
             value={entryName}
             onChangeText={setEntryName}
           />
-          <GooglePlacesAutocomplete
-            placeholder="Search for a location"
-            onPress={(data, details = null) => {
-              const { lat, lng } = details.geometry.location;
-              setLocation({ latitude: lat, longitude: lng });
-              setLocationName(data.description);
-            }}
-            query={{
-              key: 'AIzaSyBw2lOAQ7hUSvyEp6WlTpgt2VcsiRgyVfg', 
-              language: 'en',
-            }}
-            fetchDetails={true}
-            styles={{
-              container: styles.autocompleteContainer,
-              textInputContainer: styles.autocompleteTextInputContainer,
-              textInput: styles.autocompleteInput,
-              listView: styles.autocompleteListView,
-            }}
-          />
+          {!location && (
+            <GooglePlacesAutocomplete
+              placeholder="Search for a location"
+              onPress={(data, details = null) => {
+                const { lat, lng } = details.geometry.location;
+                setLocation({ latitude: lat, longitude: lng });
+                setLocationName(data.description);
+              }}
+              query={{
+                key: 'AIzaSyBw2lOAQ7hUSvyEp6WlTpgt2VcsiRgyVfg',
+                language: 'en',
+              }}
+              fetchDetails={true}
+              styles={{
+                container: styles.autocompleteContainer,
+                textInputContainer: styles.autocompleteTextInputContainer,
+                textInput: styles.autocompleteInput,
+                listView: styles.autocompleteListView,
+              }}
+            />
+          )}
           <MapView
             style={styles.map}
             initialRegion={{
@@ -139,8 +142,7 @@ const Journal = ({ navigation }) => {
             )}
           </MapView>
           {editingEntry && (<TouchableOpacity style={styles.button}>
-            {/*Pass entry name and location to journal entry screen*/}
-            <Text style={styles.buttonText} onPress = {() => {navigation.navigate('JournalEntry', { entryName, locationName });}}>{editingEntry ? "Open Entry" : ""}</Text>
+            <Text style={styles.buttonText} onPress={() => { navigation.navigate('JournalEntry', { entryName, locationName }); }}>{editingEntry ? "Open Entry" : ""}</Text>
           </TouchableOpacity>)}
           <TouchableOpacity style={styles.button} onPress={addOrEditEntry} >
             <Text style={styles.buttonText}>{editingEntry ? "Save Changes" : "Save Entry"}</Text>
@@ -158,18 +160,22 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     paddingTop: Constants.statusBarHeight,
-    flex: 1
+    flex: 1,
   },
   entryList: {
-    paddingTop: 150,
+
     paddingBottom: 20,
-    flexGrow: 1
+    flexGrow: 1,
   },
   entry: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    paddingLeft: 20,
+    paddingLeft: 18,
+    marginTop: 10,
+    marginHorizontal: 20, // Add horizontal margins to center the entries
   },
   entryIcon: {
     marginRight: 10,
@@ -198,7 +204,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: 35,
     fontFamily: 'Roboto',
     color: 'black',
   },
@@ -208,19 +214,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 15,
-    borderRadius: 5,
+    borderRadius: 18,
     fontSize: 18,
     fontFamily: 'Roboto',
   },
   autocompleteContainer: {
     width: '100%',
     zIndex: 1,
+    borderRadius: 18,
   },
   autocompleteTextInputContainer: {
     width: '100%',
+    borderRadius: 18,
   },
   autocompleteInput: {
-    borderRadius: 5,
+    borderRadius: 18,
     borderWidth: 1,
     borderColor: '#ccc',
     paddingLeft: 10,
@@ -231,16 +239,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 40,
     zIndex: 2,
+    borderRadius: 18,
   },
   map: {
     width: '100%',
     height: 200,
+    borderRadius: 18,
     marginBottom: 15,
   },
   button: {
-    backgroundColor: '#77A0C6',
+    backgroundColor: '#c3c3c3',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 18,
     marginVertical: 5,
     width: '100%',
     alignItems: 'center',

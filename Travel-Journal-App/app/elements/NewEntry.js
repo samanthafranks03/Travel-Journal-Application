@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 export default function NewEntry({ openModal }) {
   return (
     <TouchableOpacity style={styles.container} onPress={openModal}>
-      <Icon style={styles.icon} size={100} name='plussquareo' />
+      <Icon style={styles.icon} size={30} name='plussquareo' />
       <Text style={styles.text}>New Entry</Text>
     </TouchableOpacity>
   );
@@ -13,13 +13,15 @@ export default function NewEntry({ openModal }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
-    width: '100%',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    position: 'absolute',
-    top: 175,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 20,
+    marginHorizontal: 20,
+    marginVertical: 20,
+    marginTop: 80,
   },
   text: {
     color: 'black',
@@ -27,8 +29,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   icon: {
-    color: '#77A0C6',
-    fontSize: 100,
-    paddingHorizontal: 20,
+    color: 'black',
+    marginRight: 10,
   },
 });

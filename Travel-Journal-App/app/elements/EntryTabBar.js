@@ -41,10 +41,6 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
     setSelectedTextColor(color);
   };
 
-  const handleStickerColorChange = (color) => {
-    setSelectedStickerColor(color);
-  };
-
   const handleColorSelect = () => {
     changeTextBoxColor(selectedColor);
     setColorModalVisible(false);

@@ -82,9 +82,11 @@ const Journal = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+
       <JournalHeader headerTitle="Journal" navigation={navigation} />
-      <SearchBar onChangeText={updateSearch} value={search} />
+      {/*<SearchBar onChangeText={updateSearch} value={search} /> */}
       <View style={styles.newEntryButton} > 
+      <View style={styles.test} > 
         <NewEntry openModal={() => setModalVisible(true)} />
         </View>
       <FlatList
@@ -92,7 +94,9 @@ const Journal = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.entryList}
+        style={{flex: 1}}
       />
+      </View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -169,9 +173,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   entryList: {
-
-    paddingBottom: 20,
-    flexGrow: 1,
   },
   entry: {
     backgroundColor: '#f9f9f9',
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingLeft: 18,
-    marginTop: 150,
+    marginTop: 10,
     marginHorizontal: 20, // Add horizontal margins to center the entries
   },
   entryIcon: {
@@ -267,6 +268,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   newEntryButton: {
+    flex: 1,
+    flexGrow: 1,
+  },
+  test: {
+    padding: 10
   }
 });
 

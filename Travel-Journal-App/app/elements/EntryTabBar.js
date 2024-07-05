@@ -222,14 +222,17 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    backgroundColor: 'white',
   },
   header: {
-    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 40,
+    justifyContent: 'space-around',
+    paddingVertical: 10,
   },
   colorPickerContainer: {
     flex: 1,

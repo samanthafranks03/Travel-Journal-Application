@@ -9,7 +9,7 @@ const JournalEntry = ({ navigation, route }) => {
   // Get entry name and location as parameters
   const { entryName, locationName } = route.params;
 
-  // State for visibility, username input, and collaborators
+  // State for visibility, username input, collaborators, text inputs, and stickers
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [collaborators, setCollaborators] = useState([]);
@@ -42,43 +42,62 @@ const JournalEntry = ({ navigation, route }) => {
   };
 
   const addSticker = (icon) => {
-    setStickers([...stickers, { icon}]);
+    setStickers([...stickers, { icon }]);
   };
 
   const addImage = (uri) => {
     setImages([...images, uri]);
   };
 
-
   const addNewTextBox = () => {
-    const newTextBox = (
-      <View key={textInputs.length} style={styles.textBoxContainer}>
-        {/* Text box */}
-        <View style={[styles.textBox, { backgroundColor: textBoxColor }]}>
-          <TextInput
-            placeholder="Title"
-            fontSize={25}
-            placeholderTextColor={textColor}
-            style={{ color: textColor }}
-          />
-          <TextInput
-            placeholder="Date"
-            fontSize={18}
-            placeholderTextColor={textColor}
-            style={{ color: textColor }}
-          />
-          <TextInput
-            placeholder="Add text here"
-            fontSize={15}
-            multiline={true}
-            placeholderTextColor={textColor}
-            style={{ color: textColor }}
-          />
-        </View>
-      </View>
-    );
-    setTextInputs([newTextBox, ...textInputs]);
+    const newIndex = textInputs.length + 1;
+    const newTextBox = {
+      id: newIndex.toString(),
+      title: '',
+      date: '',
+      content: '',
+    };
+    setTextInputs([...textInputs, newTextBox]);
   };
+
+  const updateTextBox = (index, field, value) => {
+    const updatedTextInputs = [...textInputs];
+    updatedTextInputs[index][field] = value;
+    setTextInputs(updatedTextInputs);
+  };
+
+  const renderTextBox = ({ item, index }) => (
+    <View key={item.id} style={styles.textBoxContainer}>
+      {/* Text box */}
+      <View style={[styles.textBox, { backgroundColor: textBoxColor }]}>
+        <TextInput
+          placeholder="Title"
+          fontSize={25}
+          placeholderTextColor={textColor}
+          style={{ color: textColor }}
+          value={item.title}
+          onChangeText={(text) => updateTextBox(index, 'title', text)}
+        />
+        <TextInput
+          placeholder="Date"
+          fontSize={18}
+          placeholderTextColor={textColor}
+          style={{ color: textColor }}
+          value={item.date}
+          onChangeText={(text) => updateTextBox(index, 'date', text)}
+        />
+        <TextInput
+          placeholder="Add text here"
+          fontSize={15}
+          multiline={true}
+          placeholderTextColor={textColor}
+          style={{ color: textColor }}
+          value={item.content}
+          onChangeText={(text) => updateTextBox(index, 'content', text)}
+        />
+      </View>
+    </View>
+  );
 
   return (
     <View style={styles.container}>
@@ -106,10 +125,13 @@ const JournalEntry = ({ navigation, route }) => {
         <Text style={styles.journalLocation}>{locationName}</Text>
       </View>
 
-      {/* Render text inputs */}
-      {textInputs.map((textInput, index) => (
-        <View key={index}>{textInput}</View>
-      ))}
+      {/* Render text inputs using FlatList */}
+      <FlatList
+        data={textInputs}
+        renderItem={renderTextBox}
+        keyExtractor={(item) => item.id}
+        extraData={{ textColor, textBoxColor }}
+      />
 
       {/* Render stickers */}
       <View style={styles.stickerContainer}>
@@ -132,15 +154,16 @@ const JournalEntry = ({ navigation, route }) => {
         addSticker={addSticker}
         addNewTextBox={addNewTextBox}
         addImage={addImage}
+        style={{position: 'absolute', flex: 1}}
       />
 
-      {/* Add Collaborator */}
+      {/* Add Collaborator modal */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          setModalVisible(!modalVisible);
+          setModalVisible(false);
         }}
       >
         <View style={styles.modalView}>
@@ -181,10 +204,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: 'white',
     paddingTop: Constants.statusBarHeight,
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   header: {
     flexDirection: 'row',

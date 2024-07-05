@@ -172,8 +172,6 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     flex: 1,
   },
-  entryList: {
-  },
   entry: {
     backgroundColor: 'white',
     borderRadius: 20,

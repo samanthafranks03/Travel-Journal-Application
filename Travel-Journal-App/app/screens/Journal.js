@@ -1,15 +1,12 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, ScrollView} from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, FlatList } from 'react-native';
 import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import JournalHeader from './ScreenHeader.js';
-import SearchBar from '../elements/SearchBar.js';
 import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { FlatList } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import Slider from '@react-native-community/slider';
-
 
 const Journal = ({ navigation }) => {
   const [entries, setEntries] = useState([]);
@@ -18,7 +15,33 @@ const Journal = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [locationName, setLocationName] = useState('');
   const [editingEntry, setEditingEntry] = useState(null);
-  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const loadEntries = async () => {
+      try {
+        const savedEntries = await AsyncStorage.getItem('entries');
+        if (savedEntries) {
+          setEntries(JSON.parse(savedEntries));
+        }
+      } catch (error) {
+        console.error('Failed to load entries', error);
+      }
+    };
+
+    loadEntries();
+  }, []);
+
+  useEffect(() => {
+    const saveEntries = async () => {
+      try {
+        await AsyncStorage.setItem('entries', JSON.stringify(entries));
+      } catch (error) {
+        console.error('Failed to save entries', error);
+      }
+    };
+
+    saveEntries();
+  }, [entries]);
 
   const generateUniqueName = (name, excludeId = null) => {
     let uniqueName = name;
@@ -30,10 +53,6 @@ const Journal = ({ navigation }) => {
     }
     return uniqueName;
   };
-
-  const updateSearch = (search) => {
-      setSearch
-  }
 
   const addOrEditEntry = () => {
     if (entryName.trim() === '') {
@@ -59,6 +78,14 @@ const Journal = ({ navigation }) => {
     setModalVisible(false);
   };
 
+  const deleteEntry = () => {
+    if (editingEntry) {
+      setEntries(prevEntries => prevEntries.filter(entry => entry.id !== editingEntry.id));
+      setEditingEntry(null);
+      setModalVisible(false);
+    }
+  };
+
   const editEntry = (entry) => {
     setEditingEntry(entry);
     setEntryName(entry.name);
@@ -74,28 +101,29 @@ const Journal = ({ navigation }) => {
   };
 
   const renderItem = useCallback(({ item }) => (
-    <TouchableOpacity style={styles.entry} onPress={() => editEntry(item)}>
+    <TouchableOpacity
+      style={styles.entry}
+      onPress={() => editEntry(item)}
+    >
       <Icon name='book' size={45} color='black' style={styles.entryIcon} />
       <Text style={styles.entryText}>{item.name}</Text>
     </TouchableOpacity>
-  ), []);
+  ), [navigation]);
 
   return (
     <View style={styles.container}>
-
       <JournalHeader headerTitle="Journal" navigation={navigation} />
-      {/*<SearchBar onChangeText={updateSearch} value={search} /> */}
-      <View style={styles.newEntryButton} > 
-      <View style={styles.test} > 
-        <NewEntry openModal={() => setModalVisible(true)} />
+      <View style={styles.newEntryButton}>
+        <View style={styles.test}>
+          <NewEntry openModal={() => setModalVisible(true)} />
         </View>
-      <FlatList
-        data={entries}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.entryList}
-        style={{flex: 1}}
-      />
+        <FlatList
+          data={entries}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.entryList}
+          style={{flex: 1}}
+        />
       </View>
       <Modal
         animationType="slide"
@@ -113,27 +141,25 @@ const Journal = ({ navigation }) => {
             value={entryName}
             onChangeText={setEntryName}
           />
-          {!location && (
-            <GooglePlacesAutocomplete
-              placeholder="Search for a location"
-              onPress={(data, details = null) => {
-                const { lat, lng } = details.geometry.location;
-                setLocation({ latitude: lat, longitude: lng });
-                setLocationName(data.description);
-              }}
-              query={{
-                key: 'AIzaSyBw2lOAQ7hUSvyEp6WlTpgt2VcsiRgyVfg',
-                language: 'en',
-              }}
-              fetchDetails={true}
-              styles={{
-                container: styles.autocompleteContainer,
-                textInputContainer: styles.autocompleteTextInputContainer,
-                textInput: styles.autocompleteInput,
-                listView: styles.autocompleteListView,
-              }}
-            />
-          )}
+          <GooglePlacesAutocomplete
+            placeholder="Search for a location"
+            onPress={(data, details = null) => {
+              const { lat, lng } = details.geometry.location;
+              setLocation({ latitude: lat, longitude: lng });
+              setLocationName(data.description);
+            }}
+            query={{
+              key: 'AIzaSyBw2lOAQ7hUSvyEp6WlTpgt2VcsiRgyVfg',
+              language: 'en',
+            }}
+            fetchDetails={true}
+            styles={{
+              container: styles.autocompleteContainer,
+              textInputContainer: styles.autocompleteTextInputContainer,
+              textInput: styles.autocompleteInput,
+              listView: styles.autocompleteListView,
+            }}
+          />
           <MapView
             style={styles.map}
             initialRegion={{
@@ -151,10 +177,20 @@ const Journal = ({ navigation }) => {
               />
             )}
           </MapView>
-          {editingEntry && (<TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => { navigation.navigate('JournalEntry', { entryName, locationName }); }}>{editingEntry ? "Open Entry" : ""}</Text>
-          </TouchableOpacity>)}
-          <TouchableOpacity style={styles.button} onPress={addOrEditEntry} >
+          {editingEntry && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={deleteEntry}>
+                <Text style={styles.buttonText}>Delete Entry</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={() => {
+                setModalVisible(false);
+                navigation.navigate('JournalEntry', { entryId: editingEntry.id, entryName, locationName });
+              }}>
+                <Text style={styles.buttonText}>Open Entry</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <TouchableOpacity style={styles.button} onPress={addOrEditEntry}>
             <Text style={styles.buttonText}>{editingEntry ? "Save Changes" : "Save Entry"}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}>
@@ -180,7 +216,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingLeft: 18,
     marginTop: 20,
-    marginHorizontal: 20, // Add horizontal margins to center the entries
+    marginHorizontal: 20,
   },
   entryIcon: {
     marginRight: 10,
@@ -252,12 +288,16 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginBottom: 15,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   button: {
     backgroundColor: '#c3c3c3',
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
-    width: '100%',
+    width: '48%',
     alignItems: 'center',
   },
   buttonText: {
@@ -270,8 +310,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   test: {
-    padding: 10
+    padding: 10,
   }
 });
 
 export default Journal;
+

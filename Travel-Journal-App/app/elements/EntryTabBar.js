@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView, Image} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -29,8 +29,7 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
   const [textColorModalVisible, setTextColorModalVisible] = useState(false);
   const [stickerModalVisible, setStickerModalVisible] = useState(false);
   const [selectedColor, setSelectedColor] = useState('#ffffff');
-  const [selectedTextColor, setSelectedTextColor] = useState('#000000');
-  const [selectedStickerColor, setSelectedStickerColor] = useState('#000000');
+  const [selectedTextColor, setSelectedTextColor] = useState('#ffffff');
   const [selectedIcon, setSelectedIcon] = useState(null);
 
   const handleColorChange = (color) => {
@@ -52,7 +51,7 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
   };
 
   const handleStickerSelect = () => {
-    addSticker(selectedIcon, selectedStickerColor);
+    addSticker(selectedIcon);
     setStickerModalVisible(false);
   };
 
@@ -60,7 +59,6 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
     addImage(uri);
   };
 
-  
   const icons = [
     require('../../assets/icons/travel.png'),
     require('../../assets/icons/airplane.png'),
@@ -95,7 +93,6 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
     require('../../assets/icons/sun.png'),
     require('../../assets/icons/snow.png'),
   ];
-
 
   return (
     <View style={styles.container}>
@@ -135,9 +132,8 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
       >
         <View style={styles.colorPickerContainer}>
           <ColorPicker
-            ref={r => { this.picker = r }}
             color={selectedColor}
-            onColorChange={handleColorChange}
+            onColorChangeComplete={handleColorChange}
             thumbSize={40}
             sliderSize={40}
             noSnap={true}
@@ -151,7 +147,7 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
             <Button title="Select Color" onPress={handleColorSelect} color="#6200EE" />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={() => {setColorModalVisible(false)}} color="#6200EE" />
+            <Button title="Cancel" onPress={() => { setColorModalVisible(false) }} color="#6200EE" />
           </View>
         </View>
       </Modal>
@@ -165,9 +161,8 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
       >
         <View style={styles.colorPickerContainer}>
           <ColorPicker
-            ref={r => { this.picker = r }}
             color={selectedTextColor}
-            onColorChange={handleTextColorChange}
+            onColorChangeComplete={handleTextColorChange}
             thumbSize={40}
             sliderSize={40}
             noSnap={true}
@@ -181,7 +176,7 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
             <Button title="Select Text Color" onPress={handleTextColorSelect} color="#6200EE" />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={() => {setTextColorModalVisible(false)}} color="#6200EE" />
+            <Button title="Cancel" onPress={() => { setTextColorModalVisible(false) }} color="#6200EE" />
           </View>
         </View>
       </Modal>
@@ -203,7 +198,7 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
               >
                 <Image
                   source={icon}
-                  style={{ width: 70, height: 70, }}
+                  style={{ width: 70, height: 70 }}
                 />
               </TouchableOpacity>
             ))}
@@ -212,7 +207,7 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
             <Button title="Select Sticker" onPress={handleStickerSelect} color="#6200EE" />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={() => {setStickerModalVisible(false)}} color="#6200EE" />
+            <Button title="Cancel" onPress={() => { setStickerModalVisible(false) }} color="#6200EE" />
           </View>
         </View>
       </Modal>

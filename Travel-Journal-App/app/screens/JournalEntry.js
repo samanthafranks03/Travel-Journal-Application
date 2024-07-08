@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import EntryTabBar from '../elements/EntryTabBar.js';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import EntryTabBar from '../elements/EntryTabBar.js';  // Ensure the path is correct
 
 const JournalEntry = ({ navigation, route }) => {
-  // Get entry name and location as parameters
-  const { entryName, locationName } = route.params;
+  const { entryId } = route.params;
 
-  // State for visibility, username input, collaborators, text inputs, and stickers
+  const [entryName, setEntryName] = useState(route.params.entryName);
+  const [locationName, setLocationName] = useState(route.params.locationName);
   const [modalVisible, setModalVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [collaborators, setCollaborators] = useState([]);
@@ -18,6 +18,49 @@ const JournalEntry = ({ navigation, route }) => {
   const [textColor, setTextColor] = useState('black');
   const [stickers, setStickers] = useState([]);
   const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const loadEntryContent = async () => {
+      try {
+        const savedContent = await AsyncStorage.getItem(`entry_${entryId}`);
+        if (savedContent) {
+          const { textInputs, textBoxColor, textColor, stickers, images, collaborators, entryName, locationName } = JSON.parse(savedContent);
+          setTextInputs(textInputs);
+          setTextBoxColor(textBoxColor);
+          setTextColor(textColor);
+          setStickers(stickers);
+          setImages(images);
+          setCollaborators(collaborators);
+          setEntryName(entryName);
+          setLocationName(locationName);
+        }
+      } catch (error) {
+        console.error('Failed to load entry content', error);
+      }
+    };
+
+    loadEntryContent();
+  }, [entryId]);
+
+  const saveEntryContent = async () => {
+    try {
+      const entryContent = {
+        textInputs,
+        textBoxColor,
+        textColor,
+        stickers,
+        images,
+        collaborators,
+        entryName,
+        locationName
+      };
+      await AsyncStorage.setItem(`entry_${entryId}`, JSON.stringify(entryContent));
+      Alert.alert('Success', 'Entry content saved successfully');
+    } catch (error) {
+      console.error('Failed to save entry content', error);
+      Alert.alert('Error', 'Failed to save entry content');
+    }
+  };
 
   const handleAddCollaborator = () => {
     if (username.trim()) {
@@ -32,7 +75,6 @@ const JournalEntry = ({ navigation, route }) => {
     </View>
   );
 
-  // Functions to handle color and sticker changes
   const changeTextBoxColor = (color) => {
     setTextBoxColor(color);
   };
@@ -68,7 +110,6 @@ const JournalEntry = ({ navigation, route }) => {
 
   const renderTextBox = ({ item, index }) => (
     <View key={item.id} style={styles.textBoxContainer}>
-      {/* Text box */}
       <View style={[styles.textBox, { backgroundColor: textBoxColor }]}>
         <TextInput
           placeholder="Title"
@@ -102,62 +143,49 @@ const JournalEntry = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {/* Back button */}
         <TouchableOpacity onPress={() => { navigation.navigate('Journal') }}>
           <Ionicons style={styles.icon} size={18} name='chevron-back-outline' />
         </TouchableOpacity>
-
         <View style={{ flex: 1 }} />
-        {/* Add collaborators button */}
         <TouchableOpacity style={styles.collabButton} onPress={() => setModalVisible(true)}>
           <Ionicons style={styles.icon} size={18} paddingRight={15} name='person-add-outline' />
         </TouchableOpacity>
-
-        {/* Save button */}
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity style={styles.saveButton} onPress={saveEntryContent}>
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Display entry name and location */}
       <View>
-        <Text style={styles.journalName}>{entryName}</Text>
+        <TextInput
+          style={styles.journalName}
+          value={entryName}
+          onChangeText={text => setEntryName(text)}
+        />
         <Text style={styles.journalLocation}>{locationName}</Text>
       </View>
-
-      {/* Render text inputs using FlatList */}
       <FlatList
         data={textInputs}
         renderItem={renderTextBox}
         keyExtractor={(item) => item.id}
         extraData={{ textColor, textBoxColor }}
       />
-
-      {/* Render stickers */}
       <View style={styles.stickerContainer}>
         {stickers.map((sticker, index) => (
           <Image key={index} source={sticker.icon} style={styles.sticker} />
         ))}
       </View>
-
-      {/* Render images */}
       <View style={styles.imageContainer}>
         {images.map((uri, index) => (
           <Image key={index} source={{ uri }} style={styles.image} />
         ))}
       </View>
-
-      {/* Options tab */}
       <EntryTabBar
         changeTextBoxColor={changeTextBoxColor}
         changeTextColor={changeTextColor}
         addSticker={addSticker}
         addNewTextBox={addNewTextBox}
         addImage={addImage}
-        style={{position: 'absolute', flex: 1}}
+        style={{ position: 'absolute', flex: 1 }}
       />
-
-      {/* Add Collaborator modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -325,6 +353,29 @@ const styles = StyleSheet.create({
   },
   close: {
     alignSelf: 'flex-end',
+  },
+  autocompleteContainer: {
+    width: '100%',
+    zIndex: 1,
+    borderRadius: 18,
+  },
+  autocompleteTextInputContainer: {
+    width: '100%',
+    borderRadius: 18,
+  },
+  autocompleteInput: {
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingLeft: 10,
+    fontSize: 18,
+    fontFamily: 'Roboto',
+  },
+  autocompleteListView: {
+    position: 'absolute',
+    top: 40,
+    zIndex: 2,
+    borderRadius: 18,
   },
 });
 

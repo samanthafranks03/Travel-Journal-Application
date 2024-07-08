@@ -156,7 +156,7 @@ const JournalEntry = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => { navigation.navigate('Journal') }}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Tabs') }}>
           <Ionicons style={styles.icon} size={18} name='chevron-back-outline' />
         </TouchableOpacity>
         <View style={{ flex: 1 }} />

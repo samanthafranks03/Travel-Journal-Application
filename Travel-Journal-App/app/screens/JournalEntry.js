@@ -34,7 +34,7 @@ const JournalEntry = ({ navigation, route }) => {
             stickers = [],
             images = [],
             collaborators = [],
-            entryName = route.params.entryName,
+            entryName = entryName,
             locationName = route.params.locationName,
           } = docSnap.data();
           setTextInputs(textInputs);
@@ -54,6 +54,7 @@ const JournalEntry = ({ navigation, route }) => {
     loadEntryContent();
   }, [entryId]);
 
+
   const saveEntryContent = async () => {
     try {
       const entryContent = {
@@ -67,7 +68,7 @@ const JournalEntry = ({ navigation, route }) => {
         locationName,
         userId: user.uid,
       };
-      await updateDoc(doc(db, 'entries', entryId), entryContent);
+      await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
       if (updateEntryName) {
         updateEntryName(entryId, entryName);
       }

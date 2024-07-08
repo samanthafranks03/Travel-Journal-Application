@@ -50,12 +50,18 @@ const Journal = ({ navigation }) => {
     return uniqueName;
   };
 
-  const updateEntryName = (entryId, newName) => {
-    setEntries(prevEntries =>
-      prevEntries.map(entry =>
-        entry.id === entryId ? { ...entry, name: newName } : entry
-      )
-    );
+  const updateEntryName = async (entryId, newName) => {
+    try {
+      await updateDoc(doc(db, 'entries', entryId), { name: newName });
+      setEntries(prevEntries =>
+        prevEntries.map(entry =>
+          entry.id === entryId ? { ...entry, name: newName } : entry
+        )
+      );
+    } catch (error) {
+      console.error('Failed to update entry name', error);
+      Alert.alert('Error', 'Failed to update entry name');
+    }
   };
 
   const addOrEditEntry = async () => {
@@ -212,7 +218,7 @@ const Journal = ({ navigation }) => {
                   entryId: editingEntry.id,
                   entryName,
                   locationName,
-                  updateEntryName
+                  updateEntryName: updateEntryName
                 });
                 }}
               >

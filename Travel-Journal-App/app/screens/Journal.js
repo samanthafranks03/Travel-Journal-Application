@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, FlatList } from 'react-native';
 import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth, db } from '../App'; 
+import { doc, addDoc, getDoc, getDocs, query, collection, where, updateDoc, deleteDoc } from 'firebase/firestore';
 import JournalHeader from './ScreenHeader.js';
 import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -16,32 +17,27 @@ const Journal = ({ navigation }) => {
   const [locationName, setLocationName] = useState('');
   const [editingEntry, setEditingEntry] = useState(null);
 
+  const user = auth.currentUser;
+
   useEffect(() => {
     const loadEntries = async () => {
-      try {
-        const savedEntries = await AsyncStorage.getItem('entries');
-        if (savedEntries) {
-          setEntries(JSON.parse(savedEntries));
+      if (user) {
+        try {
+          const q = query(collection(db, 'entries'), where('userId', '==', user.uid));
+          const querySnapshot = await getDocs(q);
+          const userEntries = [];
+          querySnapshot.forEach(doc => {
+            userEntries.push({ id: doc.id, ...doc.data() });
+          });
+          setEntries(userEntries);
+        } catch (error) {
+          console.error('Failed to load entries', error);
         }
-      } catch (error) {
-        console.error('Failed to load entries', error);
       }
     };
 
     loadEntries();
-  }, []);
-
-  useEffect(() => {
-    const saveEntries = async () => {
-      try {
-        await AsyncStorage.setItem('entries', JSON.stringify(entries));
-      } catch (error) {
-        console.error('Failed to save entries', error);
-      }
-    };
-
-    saveEntries();
-  }, [entries]);
+  }, [user]);
 
   const generateUniqueName = (name, excludeId = null) => {
     let uniqueName = name;
@@ -54,35 +50,47 @@ const Journal = ({ navigation }) => {
     return uniqueName;
   };
 
-  const addOrEditEntry = () => {
+  const addOrEditEntry = async () => {
     if (entryName.trim() === '') {
       Alert.alert("Error", "Entry name cannot be empty.");
       return;
     }
 
     const uniqueName = generateUniqueName(entryName, editingEntry ? editingEntry.id : null);
+    const newEntry = { name: uniqueName, location, locationName, userId: user.uid };
 
-    if (editingEntry) {
-      setEntries(prevEntries => prevEntries.map(entry =>
-        entry.id === editingEntry.id ? { ...entry, name: uniqueName, location, locationName } : entry
-      ));
-      setEditingEntry(null);
-    } else {
-      const newEntry = { id: Date.now().toString(), name: uniqueName, location, locationName };
-      setEntries((prevEntries) => [...prevEntries, newEntry]);
+    try {
+      if (editingEntry) {
+        await updateDoc(doc(db, 'entries', editingEntry.id), newEntry);
+        setEntries(prevEntries => prevEntries.map(entry => 
+          entry.id === editingEntry.id ? { ...entry, ...newEntry } : entry
+        ));
+        setEditingEntry(null);
+      } else {
+        const docRef = await addDoc(collection(db, 'entries'), newEntry);
+        setEntries(prevEntries => [...prevEntries, { id: docRef.id, ...newEntry }]);
+      }
+      setEntryName('');
+      setLocation(null);
+      setLocationName('');
+      setModalVisible(false);
+    } catch (error) {
+      console.error('Failed to save entry', error);
+      Alert.alert('Error', 'Failed to save entry');
     }
-
-    setEntryName('');
-    setLocation(null);
-    setLocationName('');
-    setModalVisible(false);
   };
 
-  const deleteEntry = () => {
+  const deleteEntry = async () => {
     if (editingEntry) {
-      setEntries(prevEntries => prevEntries.filter(entry => entry.id !== editingEntry.id));
-      setEditingEntry(null);
-      setModalVisible(false);
+      try {
+        await deleteDoc(doc(db, 'entries', editingEntry.id));
+        setEntries(prevEntries => prevEntries.filter(entry => entry.id !== editingEntry.id));
+        setEditingEntry(null);
+        setModalVisible(false);
+      } catch (error) {
+        console.error('Failed to delete entry', error);
+        Alert.alert('Error', 'Failed to delete entry');
+      }
     }
   };
 
@@ -315,4 +323,3 @@ const styles = StyleSheet.create({
 });
 
 export default Journal;
-

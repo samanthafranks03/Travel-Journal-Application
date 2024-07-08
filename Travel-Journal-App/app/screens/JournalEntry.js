@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { auth, db } from '../App'; 
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import EntryTabBar from '../elements/EntryTabBar.js';  // Ensure the path is correct
 
 const JournalEntry = ({ navigation, route }) => {
   const { entryId } = route.params;
+  const user = auth.currentUser;
 
   const [entryName, setEntryName] = useState(route.params.entryName);
   const [locationName, setLocationName] = useState(route.params.locationName);
@@ -22,9 +24,19 @@ const JournalEntry = ({ navigation, route }) => {
   useEffect(() => {
     const loadEntryContent = async () => {
       try {
-        const savedContent = await AsyncStorage.getItem(`entry_${entryId}`);
-        if (savedContent) {
-          const { textInputs, textBoxColor, textColor, stickers, images, collaborators, entryName, locationName } = JSON.parse(savedContent);
+        const docRef = doc(db, 'entries', entryId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const {
+            textInputs = [],
+            textBoxColor = 'grey',
+            textColor = 'black',
+            stickers = [],
+            images = [],
+            collaborators = [],
+            entryName = route.params.entryName,
+            locationName = route.params.locationName,
+          } = docSnap.data();
           setTextInputs(textInputs);
           setTextBoxColor(textBoxColor);
           setTextColor(textColor);
@@ -52,9 +64,10 @@ const JournalEntry = ({ navigation, route }) => {
         images,
         collaborators,
         entryName,
-        locationName
+        locationName,
+        userId: user.uid,
       };
-      await AsyncStorage.setItem(`entry_${entryId}`, JSON.stringify(entryContent));
+      await updateDoc(doc(db, 'entries', entryId), entryContent);
       Alert.alert('Success', 'Entry content saved successfully');
     } catch (error) {
       console.error('Failed to save entry content', error);
@@ -353,29 +366,6 @@ const styles = StyleSheet.create({
   },
   close: {
     alignSelf: 'flex-end',
-  },
-  autocompleteContainer: {
-    width: '100%',
-    zIndex: 1,
-    borderRadius: 18,
-  },
-  autocompleteTextInputContainer: {
-    width: '100%',
-    borderRadius: 18,
-  },
-  autocompleteInput: {
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingLeft: 10,
-    fontSize: 18,
-    fontFamily: 'Roboto',
-  },
-  autocompleteListView: {
-    position: 'absolute',
-    top: 40,
-    zIndex: 2,
-    borderRadius: 18,
   },
 });
 

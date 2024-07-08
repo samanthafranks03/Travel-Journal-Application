@@ -152,7 +152,7 @@ const Journal = ({ navigation }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.entryList}
-          style={{flex: 1}}
+          style={{flex: 1, marginBottom: 50}}
         />
       </View>
       <Modal

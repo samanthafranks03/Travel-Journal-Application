@@ -34,7 +34,7 @@ const JournalEntry = ({ navigation, route }) => {
             stickers = [],
             images = [],
             collaborators = [],
-            entryName = entryName,
+            entryName = route.params.entryName,
             locationName = route.params.locationName,
           } = docSnap.data();
           setTextInputs(textInputs);
@@ -235,7 +235,7 @@ const JournalEntry = ({ navigation, route }) => {
         <TextInput
           style={styles.journalName}
           value={entryName}
-          onChangeText={text => setEntryName(text)}
+          onChangeText={text => updateEntryName(text)}
         />
         <Text style={styles.journalLocation}>{locationName}</Text>
       </View>

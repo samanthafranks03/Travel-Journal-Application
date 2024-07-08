@@ -102,6 +102,14 @@ const Journal = ({ navigation }) => {
     setModalVisible(true);
   };
 
+  const handleNewEntry = () => {
+    setEditingEntry(null);
+    setEntryName('');
+    setLocation(null);
+    setLocationName('');
+    setModalVisible(true);
+  };
+
   const onMapPress = (event) => {
     const { coordinate } = event.nativeEvent;
     setLocation(coordinate);
@@ -123,7 +131,7 @@ const Journal = ({ navigation }) => {
       <JournalHeader headerTitle="Journal" navigation={navigation} />
       <View style={styles.newEntryButton}>
         <View style={styles.test}>
-          <NewEntry openModal={() => setModalVisible(true)} />
+          <NewEntry openModal={handleNewEntry} />
         </View>
         <FlatList
           data={entries}

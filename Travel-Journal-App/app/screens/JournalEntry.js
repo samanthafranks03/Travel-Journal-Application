@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert, Animated, PanResponder } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert, Animated, PanResponder, KeyboardAvoidingView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
 import { auth, db } from '../App.js';
@@ -58,39 +58,39 @@ const JournalEntry = ({ navigation, route }) => {
   }, [entryId]);
 
   const saveEntryContent = async () => {
-    try {
-      // Extracting the necessary data from stickers state
-      const stickersData = stickers.map(sticker => ({
-        icon: sticker.icon,
-        // Only saving the x and y values, not the Animated.ValueXY object itself
-        position: {
-          x: sticker.pan.x._value,
-          y: sticker.pan.y._value,
-        },
-      }));
-  
-      const entryContent = {
-        textInputs,
-        textBoxColor,
-        textColor,
-        stickers: stickersData, // Save extracted data instead of the Animated.ValueXY object
-        images,
-        collaborators,
-        entryName,
-        locationName,
-        userId: user.uid,
-      };
-  
-      await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
-      if (updateEntryName) {
-        updateEntryName(entryId, entryName);
-      }
-      Alert.alert('Success', 'Entry content saved successfully');
-    } catch (error) {
-      console.error('Failed to save entry content', error);
-      Alert.alert('Error', 'Failed to save entry content');
+  try {
+    // Extracting the necessary data from stickers state
+    const stickersData = stickers.map(sticker => ({
+      icon: sticker.icon,
+      // Only saving the x and y values, not the Animated.ValueXY object itself
+      position: {
+        x: sticker.pan.x._value,
+        y: sticker.pan.y._value,
+      },
+    }));
+
+    const entryContent = {
+      textInputs,
+      textBoxColor,
+      textColor,
+      stickers: stickersData, // Save extracted data instead of the Animated.ValueXY object
+      images,
+      collaborators,
+      entryName,
+      locationName,
+      userId: user.uid,
+    };
+
+    await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
+    if (updateEntryName) {
+      updateEntryName(entryId, entryName);
     }
-  };
+    Alert.alert('Success', 'Entry content saved successfully');
+  } catch (error) {
+    console.error('Failed to save entry content', error);
+    Alert.alert('Error', 'Failed to save entry content');
+  }
+};
 
   const handleAddCollaborator = () => {
     if (username.trim()) {
@@ -148,6 +148,7 @@ const JournalEntry = ({ navigation, route }) => {
         <TextInput
           placeholder="Title"
           fontSize={25}
+          multiline={true}
           placeholderTextColor={textColor}
           style={{ color: textColor }}
           value={item.title}
@@ -156,6 +157,7 @@ const JournalEntry = ({ navigation, route }) => {
         <TextInput
           placeholder="Date"
           fontSize={18}
+          multiline={true}
           placeholderTextColor={textColor}
           style={{ color: textColor }}
           value={item.date}
@@ -349,10 +351,10 @@ const styles = StyleSheet.create({
   textBox: {
     borderWidth: 20,
     borderColor: 'white',
-    height: 200,
     padding: 15,
     flexGrow: 1,
     borderRadius: 40,
+    minHeight: 200
   },
   stickerContainer: {
     flexDirection: 'row',

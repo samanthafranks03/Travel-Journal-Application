@@ -11,25 +11,12 @@ const Map = ({ route }) => {
       <MapView
         style={styles.map}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: 37.0902,
+          longitude: -95.7129,
+          latitudeDelta: 50,
+          longitudeDelta: 100,
         }}
       >
-        {entries.map((entry) => (
-          entry.location && (
-            <Marker
-              key={entry.id}
-              coordinate={{
-                latitude: entry.location.latitude,
-                longitude: entry.location.longitude,
-              }}
-              title={entry.name}
-              description={entry.locationName}
-            />
-          )
-        ))}
       </MapView>
     </View>
   );

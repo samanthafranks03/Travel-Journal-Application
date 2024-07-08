@@ -2,16 +2,22 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView, Image } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { launchImageLibrary } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker'
 import ColorPicker from 'react-native-wheel-color-picker';
 
-const openImageLibrary = (setSelectedImage) => {
+const openImageLibrary = async (setSelectedImage) => {
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (status !== 'granted') {
+    console.log('Permission to access media library denied');
+    return;
+  }
+
   const options = {
     mediaType: 'photo',
     quality: 1,
   };
 
-  launchImageLibrary(options, (response) => {
+  ImagePicker.launchImageLibraryAsync(options, (response) => {
     if (response.didCancel) {
       console.log('User cancelled image picker');
     } else if (response.error) {

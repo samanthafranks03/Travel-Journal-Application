@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert, GestureResponderEvent} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert, Animated, PanResponder } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import { auth, db } from '../App'; 
+import { auth, db } from '../App.js';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import EntryTabBar from '../elements/EntryTabBar.js';  
+import EntryTabBar from '../elements/EntryTabBar.js';
 
 const JournalEntry = ({ navigation, route }) => {
-  const { entryId, updateEntryName} = route.params;
+  const { entryId, updateEntryName } = route.params;
   const user = auth.currentUser;
 
   const [entryName, setEntryName] = useState(route.params.entryName);
@@ -40,7 +40,10 @@ const JournalEntry = ({ navigation, route }) => {
           setTextInputs(textInputs);
           setTextBoxColor(textBoxColor);
           setTextColor(textColor);
-          setStickers(stickers);
+          setStickers(stickers.map(sticker => ({
+            ...sticker,
+            pan: new Animated.ValueXY({ x: 10, y: -500 })
+          })));
           setImages(images);
           setCollaborators(collaborators);
           setEntryName(entryName);
@@ -54,20 +57,30 @@ const JournalEntry = ({ navigation, route }) => {
     loadEntryContent();
   }, [entryId]);
 
-
   const saveEntryContent = async () => {
     try {
+      // Extracting the necessary data from stickers state
+      const stickersData = stickers.map(sticker => ({
+        icon: sticker.icon,
+        // Only saving the x and y values, not the Animated.ValueXY object itself
+        position: {
+          x: sticker.pan.x._value,
+          y: sticker.pan.y._value,
+        },
+      }));
+  
       const entryContent = {
         textInputs,
         textBoxColor,
         textColor,
-        stickers,
+        stickers: stickersData, // Save extracted data instead of the Animated.ValueXY object
         images,
         collaborators,
         entryName,
         locationName,
         userId: user.uid,
       };
+  
       await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
       if (updateEntryName) {
         updateEntryName(entryId, entryName);
@@ -101,7 +114,11 @@ const JournalEntry = ({ navigation, route }) => {
   };
 
   const addSticker = (icon) => {
-    setStickers([...stickers, { icon }]);
+    const sticker = {
+      icon,
+      pan: new Animated.ValueXY({ x: 10, y: -500 }), // Adjust initial position here
+    };
+    setStickers([...stickers, sticker]);
   };
 
   const addImage = (uri) => {
@@ -157,6 +174,47 @@ const JournalEntry = ({ navigation, route }) => {
     </View>
   );
 
+  const renderSticker = (sticker, index) => {
+    let lastOffset = { x: 0, y: 0 };
+
+    const panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt, gestureState) => {
+        sticker.pan.setOffset({
+          x: sticker.pan.x._value,
+          y: sticker.pan.y._value,
+        });
+        sticker.pan.setValue({ x: 0, y: 0 });
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        sticker.pan.x.setValue(gestureState.dx);
+        sticker.pan.y.setValue(gestureState.dy);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        sticker.pan.flattenOffset();
+      },
+    });
+
+    return (
+      <Animated.View
+        key={index}
+        style={[
+          {
+            transform: [
+              { translateX: sticker.pan.x },
+              { translateY: sticker.pan.y },
+            ],
+          },
+          styles.stickerContainer,
+        ]}
+        {...panResponder.panHandlers}
+      >
+        <Image source={sticker.icon} style={styles.sticker} />
+      </Animated.View>
+    );
+  };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -185,10 +243,9 @@ const JournalEntry = ({ navigation, route }) => {
         keyExtractor={(item) => item.id}
         extraData={{ textColor, textBoxColor }}
       />
+      {/* Stickers */}
       <View style={styles.stickerContainer}>
-        {stickers.map((sticker, index) => (
-          <Image key={index} source={sticker.icon} style={styles.sticker} />
-        ))}
+        {stickers.map((sticker, index) => renderSticker(sticker, index))}
       </View>
       <View style={styles.imageContainer}>
         {images.map((uri, index) => (

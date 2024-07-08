@@ -5,13 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import * as ImagePicker from 'expo-image-picker'
 import ColorPicker from 'react-native-wheel-color-picker';
 
-const openImageLibrary = async (setSelectedImage) => {
-  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  if (status !== 'granted') {
-    console.log('Permission to access media library denied');
-    return;
-  }
-
+const openImageLibrary = (setSelectedImage) => {
   const options = {
     mediaType: 'photo',
     quality: 1,

@@ -4,10 +4,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
 import { auth, db } from '../App'; 
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import EntryTabBar from '../elements/EntryTabBar.js';  // Ensure the path is correct
+import EntryTabBar from '../elements/EntryTabBar.js';  
 
 const JournalEntry = ({ navigation, route }) => {
-  const { entryId } = route.params;
+  const { entryId, updateEntryName} = route.params;
   const user = auth.currentUser;
 
   const [entryName, setEntryName] = useState(route.params.entryName);
@@ -68,6 +68,9 @@ const JournalEntry = ({ navigation, route }) => {
         userId: user.uid,
       };
       await updateDoc(doc(db, 'entries', entryId), entryContent);
+      if (updateEntryName) {
+        updateEntryName(entryId, entryName);
+      }
       Alert.alert('Success', 'Entry content saved successfully');
     } catch (error) {
       console.error('Failed to save entry content', error);

@@ -50,6 +50,14 @@ const Journal = ({ navigation }) => {
     return uniqueName;
   };
 
+  const updateEntryName = (entryId, newName) => {
+    setEntries(prevEntries =>
+      prevEntries.map(entry =>
+        entry.id === entryId ? { ...entry, name: newName } : entry
+      )
+    );
+  };
+
   const addOrEditEntry = async () => {
     if (entryName.trim() === '') {
       Alert.alert("Error", "Entry name cannot be empty.");
@@ -200,10 +208,16 @@ const Journal = ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => {
                 setModalVisible(false);
-                navigation.navigate('JournalEntry', { entryId: editingEntry.id, entryName, locationName });
-              }}>
-                <Text style={styles.buttonText}>Open Entry</Text>
-              </TouchableOpacity>
+                navigation.navigate('JournalEntry', {
+                  entryId: editingEntry.id,
+                  entryName,
+                  locationName,
+                  updateEntryName
+                });
+                }}
+              >
+  <Text style={styles.buttonText}>Open Entry</Text>
+</TouchableOpacity>
             </View>
           )}
           <TouchableOpacity style={styles.button} onPress={addOrEditEntry}>

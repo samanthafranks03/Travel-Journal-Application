@@ -13,7 +13,7 @@ import SignUp from './screens/SignUp';
 import Profile from './screens/Profile';
 import Journal from './screens/Journal';
 import JournalEntry from './screens/JournalEntry';
-import TabsLayout from './tabs/_layout';
+import TabsLayout from './(tabs)/_layout';
 import ScreenHeader from './screens/ScreenHeader';
 
 const firebaseConfig = {

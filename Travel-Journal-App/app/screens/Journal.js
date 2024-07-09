@@ -8,6 +8,7 @@ import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Journal = ({ navigation }) => {
   const [entries, setEntries] = useState([]);
@@ -163,7 +164,13 @@ const Journal = ({ navigation }) => {
           setModalVisible(!modalVisible);
         }}
       >
+        
         <View style={styles.modalView}>
+        <View style={styles.close}>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <Ionicons name="close-outline" size={20} />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.modalText}>{editingEntry ? "Edit Journal Entry" : "New Journal Entry"}</Text>
           <TextInput
             style={styles.input}
@@ -209,9 +216,6 @@ const Journal = ({ navigation }) => {
           </MapView>
           {editingEntry && (
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={deleteEntry}>
-                <Text style={styles.buttonText}>Delete Entry</Text>
-              </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => {
                 setModalVisible(false);
                 navigation.navigate('JournalEntry', {
@@ -222,15 +226,16 @@ const Journal = ({ navigation }) => {
                 });
                 }}
               >
-  <Text style={styles.buttonText}>Open Entry</Text>
-</TouchableOpacity>
+              <Text style={styles.buttonText}>Open Entry</Text>
+              </TouchableOpacity>
+              
+                <TouchableOpacity style={styles.button} onPress={deleteEntry}>
+                <Text style={styles.buttonText}>Delete Entry</Text>
+              </TouchableOpacity>
             </View>
           )}
           <TouchableOpacity style={styles.button} onPress={addOrEditEntry}>
             <Text style={styles.buttonText}>{editingEntry ? "Save Changes" : "Save Entry"}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}>
-            <Text style={styles.buttonText}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -256,12 +261,12 @@ const styles = StyleSheet.create({
   },
   entryIcon: {
     marginRight: 10,
-    color: '#306182'
+    color: '#385e8a'
   },
   entryText: {
     fontSize: 25,
     fontFamily: 'Roboto',
-    color: '#306182',
+    color: '#385e8a',
   },
   modalView: {
     flex: 1,
@@ -326,15 +331,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
   button: {
-    backgroundColor: '#c3c3c3',
+    backgroundColor: '#98B6D0',
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
-    width: '48%',
+    width: 150,
     alignItems: 'center',
   },
   buttonText: {
@@ -348,7 +352,10 @@ const styles = StyleSheet.create({
   },
   test: {
     padding: 10,
-  }
+  },
+  close: {
+    alignSelf: 'flex-end',
+  },
 });
 
 export default Journal;

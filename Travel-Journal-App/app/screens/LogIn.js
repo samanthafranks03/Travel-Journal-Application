@@ -95,7 +95,7 @@ const LogIn = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Email or Username"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={input}
             onChangeText={value => setInput(value)}
             editable={true}
@@ -106,7 +106,7 @@ const LogIn = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Password"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={password}
             onChangeText={value => setPassword(value)}
             editable={true}

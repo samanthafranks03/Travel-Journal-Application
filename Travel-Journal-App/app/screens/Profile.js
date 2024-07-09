@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   logOutText: {
-    color: '#BF0000',
+    color: 'black',
     fontSize: 15,
     fontWeight: 'bold',
   },

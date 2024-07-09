@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   text: {
-    color: '#306182',
+    color: '#385e8a',
     fontSize: 25,
     fontFamily: 'Roboto',
   },
   icon: {
-    color: '#306182',
+    color: '#385e8a',
     marginRight: 10,
     size: 30
   },

@@ -87,7 +87,7 @@ const SignUp = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="First Name"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={firstName}
             onChangeText={value => setFirstName(value)}
             editable={true}
@@ -98,7 +98,7 @@ const SignUp = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Last Name"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={lastName}
             onChangeText={value => setLastName(value)}
             editable={true}
@@ -109,7 +109,7 @@ const SignUp = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Username"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={username}
             onChangeText={value => setUsername(value)}
             editable={true}
@@ -120,7 +120,7 @@ const SignUp = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Email"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={email}
             onChangeText={value => setEmail(value)}
             editable={true}
@@ -131,7 +131,7 @@ const SignUp = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Phone Number"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={number}
             onChangeText={value => setNumber(value)}
             editable={true}
@@ -142,7 +142,7 @@ const SignUp = ({ navigation }) => {
           <TextInput
             style={styles.inputText}
             placeholder="Password"
-            placeholderTextColor="#003f5c"
+            placeholderTextColor="grey"
             value={password}
             onChangeText={value => setPassword(value)}
             editable={true}

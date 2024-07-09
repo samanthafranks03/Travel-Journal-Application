@@ -208,11 +208,7 @@ const Journal = ({ navigation, route }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.entryList}
-<<<<<<< HEAD
           style={{flex: 1, marginBottom: 50}}
-=======
-          style={{ flex: 1 }}
->>>>>>> origin/collab-notifications
         />
       </View>
       <Modal
@@ -225,18 +221,13 @@ const Journal = ({ navigation, route }) => {
       >
         
         <View style={styles.modalView}>
-<<<<<<< HEAD
         <View style={styles.close}>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Ionicons name="close-outline" size={20} />
             </TouchableOpacity>
           </View>
           <Text style={styles.modalText}>{editingEntry ? "Edit Journal Entry" : "New Journal Entry"}</Text>
-=======
-          <Text style={styles.modalText}>
-            {editingEntry ? 'Edit Journal Entry' : 'New Journal Entry'}
-          </Text>
->>>>>>> origin/collab-notifications
+
           <TextInput
             style={styles.input}
             placeholder="Entry Name"
@@ -278,7 +269,6 @@ const Journal = ({ navigation, route }) => {
           </MapView>
           {editingEntry && (
             <View style={styles.buttonContainer}>
-<<<<<<< HEAD
               <TouchableOpacity style={styles.button} onPress={() => {
                 setModalVisible(false);
                 navigation.navigate('JournalEntry', {
@@ -294,24 +284,7 @@ const Journal = ({ navigation, route }) => {
               
                 <TouchableOpacity style={styles.button} onPress={deleteEntry}>
                 <Text style={styles.buttonText}>Delete Entry</Text>
-=======
-              <TouchableOpacity style={styles.button} onPress={deleteEntry}>
-                <Text style={styles.buttonText}>Delete Entry</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  setModalVisible(false);
-                  navigation.navigate('JournalEntry', {
-                    entryId: editingEntry.id,
-                    entryName,
-                    locationName,
-                    updateEntryName: updateEntryName,
-                  });
-                }}
-              >
-                <Text style={styles.buttonText}>Open Entry</Text>
->>>>>>> origin/collab-notifications
+
               </TouchableOpacity>
             </View>
           )}
@@ -320,15 +293,6 @@ const Journal = ({ navigation, route }) => {
               {editingEntry ? 'Save Changes' : 'Save Entry'}
             </Text>
           </TouchableOpacity>
-<<<<<<< HEAD
-=======
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
->>>>>>> origin/collab-notifications
         </View>
       </Modal>
     </View>
@@ -445,12 +409,10 @@ const styles = StyleSheet.create({
   test: {
     padding: 10,
   },
-<<<<<<< HEAD
   close: {
     alignSelf: 'flex-end',
   },
-=======
->>>>>>> origin/collab-notifications
+
 });
 
 export default Journal;

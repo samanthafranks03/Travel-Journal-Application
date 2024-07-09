@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Journal from '../screens/Journal';
 import Map from '../screens/Map';
+import NewTrips from '../screens/NewTrips';
 import Notifications from '../screens/Notifications';
 
 const Tab = createBottomTabNavigator();

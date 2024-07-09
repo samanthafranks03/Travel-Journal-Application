@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import { View, Text, StyleSheet, LogBox} from 'react-native';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import LogIn from './screens/LogIn';
@@ -13,14 +13,8 @@ import SignUp from './screens/SignUp';
 import Profile from './screens/Profile';
 import Journal from './screens/Journal';
 import JournalEntry from './screens/JournalEntry';
-import TabsLayout from './(tabs)/_layout';
+import TabsLayout from './tabs/_layout';
 import ScreenHeader from './screens/ScreenHeader';
-
-// Ignore specific warning messages
-LogBox.ignoreLogs(['Warning: ...']);
-
-// Ignore all log notifications
-LogBox.ignoreAllLogs();
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAnlTM5qYrY6hzimSND8E3SnuWFwtOCj38',

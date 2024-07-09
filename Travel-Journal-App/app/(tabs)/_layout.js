@@ -27,9 +27,9 @@ const TabsLayout = () => {
             case 'Map':
               iconName = 'location-outline';
               break;
-            case 'New Trips':
-              iconName = 'airplane-outline';
-              break;
+            //case 'New Trips':
+              //iconName = 'airplane-outline';
+             //break;
             case 'Notifications':
               iconName = 'notifications-outline';
               break;
@@ -45,7 +45,7 @@ const TabsLayout = () => {
     >
       <Tab.Screen name="Journal" component={Journal} options={{ headerShown: false }} />
       <Tab.Screen name="Map" component={Map} options={{ headerShown: false }}/>
-      <Tab.Screen name="New Trips" component={NewTrips} options={{ headerShown: false }}/>
+      {/*<Tab.Screen name="New Trips" component={NewTrips} options={{ headerShown: false }}/>*/}
       <Tab.Screen name="Notifications" component={Notifications}options={{ headerShown: false }} />
     </Tab.Navigator>
    

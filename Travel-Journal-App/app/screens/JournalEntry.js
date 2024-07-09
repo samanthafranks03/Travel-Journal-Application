@@ -42,9 +42,12 @@ const JournalEntry = ({ navigation, route }) => {
           setTextColor(textColor);
           setStickers(stickers.map(sticker => ({
             ...sticker,
-            pan: new Animated.ValueXY({ x: 10, y: -500 })
+            pan: new Animated.ValueXY({ x: sticker.position.x, y: sticker.position.y })
           })));
-          setImages(images);
+          setImages(images.map(image => ({
+            ...image,
+            pan: new Animated.ValueXY({ x: image.position.x, y: image.position.y })
+          })));
           setCollaborators(collaborators);
           setEntryName(entryName);
           setLocationName(locationName);
@@ -58,39 +61,46 @@ const JournalEntry = ({ navigation, route }) => {
   }, [entryId]);
 
   const saveEntryContent = async () => {
-  try {
-    // Extracting the necessary data from stickers state
-    const stickersData = stickers.map(sticker => ({
-      icon: sticker.icon,
-      // Only saving the x and y values, not the Animated.ValueXY object itself
-      position: {
-        x: sticker.pan.x._value,
-        y: sticker.pan.y._value,
-      },
-    }));
+    try {
+      // Extracting the necessary data from stickers and images state
+      const stickersData = stickers.map(sticker => ({
+        icon: sticker.icon,
+        position: {
+          x: sticker.pan.x._value,
+          y: sticker.pan.y._value,
+        },
+      }));
 
-    const entryContent = {
-      textInputs,
-      textBoxColor,
-      textColor,
-      stickers: stickersData, // Save extracted data instead of the Animated.ValueXY object
-      images,
-      collaborators,
-      entryName,
-      locationName,
-      userId: user.uid,
-    };
+      const imagesData = images.map(image => ({
+        uri: image.uri,
+        position: {
+          x: image.pan.x._value,
+          y: image.pan.y._value,
+        },
+      }));
 
-    await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
-    if (updateEntryName) {
-      updateEntryName(entryId, entryName);
+      const entryContent = {
+        textInputs,
+        textBoxColor,
+        textColor,
+        stickers: stickersData,
+        images: imagesData,
+        collaborators,
+        entryName,
+        locationName,
+        userId: user.uid,
+      };
+
+      await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
+      if (updateEntryName) {
+        updateEntryName(entryId, entryName);
+      }
+      Alert.alert('Success', 'Entry content saved successfully');
+    } catch (error) {
+      console.error('Failed to save entry content', error);
+      Alert.alert('Error', 'Failed to save entry content');
     }
-    Alert.alert('Success', 'Entry content saved successfully');
-  } catch (error) {
-    console.error('Failed to save entry content', error);
-    Alert.alert('Error', 'Failed to save entry content');
-  }
-};
+  };
 
   const handleAddCollaborator = () => {
     if (username.trim()) {
@@ -122,7 +132,12 @@ const JournalEntry = ({ navigation, route }) => {
   };
 
   const addImage = (uri) => {
-    setImages([...images, uri]);
+    console.log('Adding image with URI:', uri);
+    const image = {
+      uri,
+      pan: new Animated.ValueXY({ x: 10, y: -500 }), // Adjust initial position here
+    };
+    setImages([...images, image]);
   };
 
   const addNewTextBox = () => {
@@ -177,11 +192,9 @@ const JournalEntry = ({ navigation, route }) => {
   );
 
   const renderSticker = (sticker, index) => {
-    let lastOffset = { x: 0, y: 0 };
-
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt, gestureState) => {
+      onPanResponderGrant: () => {
         sticker.pan.setOffset({
           x: sticker.pan.x._value,
           y: sticker.pan.y._value,
@@ -192,7 +205,7 @@ const JournalEntry = ({ navigation, route }) => {
         sticker.pan.x.setValue(gestureState.dx);
         sticker.pan.y.setValue(gestureState.dy);
       },
-      onPanResponderRelease: (evt, gestureState) => {
+      onPanResponderRelease: () => {
         sticker.pan.flattenOffset();
       },
     });
@@ -216,6 +229,43 @@ const JournalEntry = ({ navigation, route }) => {
     );
   };
 
+  const renderImage = (image, index) => {
+    const panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        image.pan.setOffset({
+          x: image.pan.x._value,
+          y: image.pan.y._value,
+        });
+        image.pan.setValue({ x: 0, y: 0 });
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        image.pan.x.setValue(gestureState.dx);
+        image.pan.y.setValue(gestureState.dy);
+      },
+      onPanResponderRelease: () => {
+        image.pan.flattenOffset();
+      },
+    });
+
+    return (
+      <Animated.View
+        key={index}
+        style={[
+          {
+            transform: [
+              { translateX: image.pan.x },
+              { translateY: image.pan.y },
+            ],
+          },
+          styles.imageContainer,
+        ]}
+        {...panResponder.panHandlers}
+      >
+        <Image source={{ uri: image.uri }} style={styles.image} />
+      </Animated.View>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -249,10 +299,9 @@ const JournalEntry = ({ navigation, route }) => {
       <View style={styles.stickerContainer}>
         {stickers.map((sticker, index) => renderSticker(sticker, index))}
       </View>
+      {/* Images */}
       <View style={styles.imageContainer}>
-        {images.map((uri, index) => (
-          <Image key={index} source={{ uri }} style={styles.image} />
-        ))}
+        {images.map((image, index) => renderImage(image, index))}
       </View>
       <EntryTabBar
         changeTextBoxColor={changeTextBoxColor}
@@ -370,6 +419,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 10,
+    position: 'absolute', // Ensuring it is on top
+    top: 0,
   },
   image: {
     width: 100,

@@ -256,11 +256,12 @@ const styles = StyleSheet.create({
   },
   entryIcon: {
     marginRight: 10,
+    color: '#306182'
   },
   entryText: {
     fontSize: 25,
     fontFamily: 'Roboto',
-    color: 'black',
+    color: '#306182',
   },
   modalView: {
     flex: 1,

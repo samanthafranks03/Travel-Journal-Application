@@ -48,7 +48,7 @@ const Notifications = ({ navigation }) => {
       if (entryDoc.exists()) {
         const entryData = entryDoc.data();
         await updateDoc(entryRef, {
-          collaborators: Array.from(new Set([...entryData.collaborators, recipientUsername]))
+          collaborators: [...entryData.collaborators, recipientUsername]
         });
 
         // Delete the notification
@@ -84,14 +84,14 @@ const Notifications = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <View style={styles.notification}>
-      <Text>{item.senderName} has invited you to collaborate on their {item.entryName} journal.</Text>
+    <View style={styles.notificationCard}>
+      <Text style={styles.notificationText}><Text style={styles.boldText}>{item.senderName}</Text> invited you to collaborate on their <Text style={styles.boldText}>{item.entryName}</Text> Journal! Press accept to collaborate!</Text>
       <View style={styles.actions}>
-        <TouchableOpacity onPress={() => handleAccept(item)} style={styles.button}>
-          <Text>Accept</Text>
+        <TouchableOpacity onPress={() => handleAccept(item)} style={styles.acceptButton}>
+          <Text style={styles.buttonText}>Accept</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDeny(item)} style={styles.button}>
-          <Text>Deny</Text>
+        <TouchableOpacity onPress={() => handleDeny(item)} style={styles.denyButton}>
+          <Text style={styles.buttonText}>Deny</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -99,7 +99,7 @@ const Notifications = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <NotificationsHeader headerTitle="Notifications" navigation={navigation}/>
+      <NotificationsHeader headerTitle="Notifications" navigation={navigation} />
       <FlatList
         data={notifications}
         renderItem={renderItem}
@@ -115,21 +115,45 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
   },
-  notification: {
+  notificationCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  notificationText: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: '#333',
+    lineHeight: 22,
+  },
+  boldText: {
+    fontWeight: 'bold',
   },
   actions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 10,
   },
-  button: {
-    padding: 10,
-    backgroundColor: '#007bff',
+  acceptButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
+  },
+  denyButton: {
+    backgroundColor: '#F44336',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 

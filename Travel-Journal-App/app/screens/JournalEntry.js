@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert, GestureResponderEvent} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Alert, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import { auth, db } from '../App'; 
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import EntryTabBar from '../elements/EntryTabBar.js';  
+import { auth, db } from '../App';
+import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import EntryTabBar from '../elements/EntryTabBar.js';
 
 const JournalEntry = ({ navigation, route }) => {
-  const { entryId, updateEntryName} = route.params;
+  const { entryId, updateEntryName } = route.params;
   const user = auth.currentUser;
 
   const [entryName, setEntryName] = useState(route.params.entryName);
@@ -54,35 +54,76 @@ const JournalEntry = ({ navigation, route }) => {
     loadEntryContent();
   }, [entryId]);
 
+  const handleAddCollaborator = async () => {
+    if (username.trim()) {
+      try {
+        // Check if the username exists in Firestore
+        const usersRef = collection(db, 'users');
+        const q = query(usersRef, where('username', '==', username.trim()));
+        const querySnapshot = await getDocs(q);
 
-  const saveEntryContent = async () => {
-    try {
-      const entryContent = {
-        textInputs,
-        textBoxColor,
-        textColor,
-        stickers,
-        images,
-        collaborators,
-        entryName,
-        locationName,
-        userId: user.uid,
-      };
-      await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
-      if (updateEntryName) {
-        updateEntryName(entryId, entryName);
+        if (querySnapshot.empty) {
+          Alert.alert('Invalid Username', 'No user found with the provided username.');
+        } else {
+          const userDoc = querySnapshot.docs[0];
+          const collaboratorId = userDoc.id;
+          const senderDoc = await getDoc(doc(db, 'users', user.uid));
+
+          if (senderDoc.exists()) {
+            const senderData = senderDoc.data();
+            Alert.alert('Collaborator Added', 'The collaborator will be notified when the entry is saved.');
+
+            // Send notification to collaborator
+            const notificationRef = collection(db, 'notifications');
+            await addDoc(notificationRef, {
+              senderId: user.uid,
+              senderName: senderData.firstName,
+              entryId: entryId,
+              entryName: entryName,
+              recipientId: collaboratorId,
+              recipientUsername: username.trim(),
+              status: 'pending',
+            });
+
+            setUsername('');
+          } else {
+            Alert.alert('Error', 'Failed to retrieve sender information.');
+          }
+        }
+      } catch (error) {
+        console.error('Error adding collaborator:', error);
+        Alert.alert('Error', 'Failed to add collaborator.');
       }
-      Alert.alert('Success', 'Entry content saved successfully');
-    } catch (error) {
-      console.error('Failed to save entry content', error);
-      Alert.alert('Error', 'Failed to save entry content');
     }
   };
 
-  const handleAddCollaborator = () => {
-    if (username.trim()) {
-      setCollaborators([...collaborators, username.trim()]);
-      setUsername('');
+  const saveEntryContent = async () => {
+    try {
+      const entryRef = doc(db, 'entries', entryId);
+      const entryDoc = await getDoc(entryRef);
+      if (entryDoc.exists()) {
+        const entryContent = {
+          ...entryDoc.data(),
+          textInputs,
+          textBoxColor,
+          textColor,
+          stickers,
+          images,
+          collaborators,
+          entryName,
+          locationName,
+        };
+        await updateDoc(entryRef, entryContent);
+        if (updateEntryName) {
+          updateEntryName(entryId, entryName);
+        }
+        Alert.alert('Success', 'Entry content saved successfully');
+      } else {
+        Alert.alert('Error', 'Entry not found.');
+      }
+    } catch (error) {
+      console.error('Failed to save entry content', error);
+      Alert.alert('Error', 'Failed to save entry content');
     }
   };
 

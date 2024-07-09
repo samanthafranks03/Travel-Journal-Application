@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, FlatList } from 'react-native';
 import Constants from 'expo-constants';
 import { auth, db } from '../App'; 
-import { doc, addDoc, getDocs, query, collection, where, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, addDoc, getDoc, getDocs, query, collection, where, updateDoc, deleteDoc } from 'firebase/firestore';
 import JournalHeader from './ScreenHeader.js';
 import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -20,17 +20,43 @@ const Journal = ({ navigation }) => {
 
   const user = auth.currentUser;
 
+  const fetchUsername = async (userId) => {
+    const userRef = doc(db, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      return userDoc.data().username;
+    } else {
+      console.error('No such user document!');
+      return null;
+    }
+  };
+
   useEffect(() => {
     const loadEntries = async () => {
       if (user) {
         try {
-          const q = query(collection(db, 'entries'), where('userId', '==', user.uid));
-          const querySnapshot = await getDocs(q);
+          const fetchedUsername = await fetchUsername(user.uid);
           const userEntries = [];
-          querySnapshot.forEach(doc => {
+
+          const q1 = query(collection(db, 'entries'), where('userId', '==', user.uid));
+          const querySnapshot1 = await getDocs(q1);
+          querySnapshot1.forEach((doc) => {
             userEntries.push({ id: doc.id, ...doc.data() });
           });
-          setEntries(userEntries);
+
+          const q2 = query(collection(db, 'entries'), where('collaborators', 'array-contains', fetchedUsername));
+          const querySnapshot2 = await getDocs(q2);
+          querySnapshot2.forEach((doc) => {
+            userEntries.push({ id: doc.id, ...doc.data() });
+          });
+
+          // Remove duplicates
+          const uniqueEntries = Array.from(new Set(userEntries.map(a => a.id)))
+            .map(id => {
+              return userEntries.find(a => a.id === id)
+            });
+
+          setEntries(uniqueEntries);
         } catch (error) {
           console.error('Failed to load entries', error);
         }
@@ -271,12 +297,12 @@ const styles = StyleSheet.create({
   },
   entryIcon: {
     marginRight: 10,
-    color: '#4f6b6f',
+    color: '#385e8a',
   },
   entryText: {
     fontSize: 25,
     fontFamily: 'Roboto',
-    color: '#4f6b6f',
+    color: '#385e8a',
   },
   modalView: {
     flex: 1,
@@ -345,7 +371,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   button: {
-    backgroundColor: '#8da1a6',
+    backgroundColor: '#98B6D0',
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,

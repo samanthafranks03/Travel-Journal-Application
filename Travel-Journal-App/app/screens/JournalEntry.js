@@ -62,45 +62,56 @@ const JournalEntry = ({ navigation, route }) => {
 
   const saveEntryContent = async () => {
     try {
-      // Extracting the necessary data from stickers and images state
-      const stickersData = stickers.map(sticker => ({
-        icon: sticker.icon,
-        position: {
-          x: sticker.pan.x._value,
-          y: sticker.pan.y._value,
-        },
-      }));
-
-      const imagesData = images.map(image => ({
-        uri: image.uri,
-        position: {
-          x: image.pan.x._value,
-          y: image.pan.y._value,
-        },
-      }));
-
-      const entryContent = {
-        textInputs,
-        textBoxColor,
-        textColor,
-        stickers: stickersData,
-        images: imagesData,
-        collaborators,
-        entryName,
-        locationName,
-        userId: user.uid,
-      };
-
-      await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
-      if (updateEntryName) {
-        updateEntryName(entryId, entryName);
+      const entryRef = doc(db, 'entries', entryId);
+      const entryDoc = await getDoc(entryRef);
+  
+      if (entryDoc.exists()) {
+        const existingData = entryDoc.data();
+  
+        // Extracting the necessary data from stickers and images state
+        const stickersData = stickers.map(sticker => ({
+          icon: sticker.icon,
+          position: {
+            x: sticker.pan.x._value,
+            y: sticker.pan.y._value,
+          },
+        }));
+  
+        const imagesData = images.map(image => ({
+          uri: image.uri,
+          position: {
+            x: image.pan.x._value,
+            y: image.pan.y._value,
+          },
+        }));
+  
+        // Merging existing data with new data and ensuring userId is not changed
+        const entryContent = {
+          ...existingData,
+          textInputs,
+          textBoxColor,
+          textColor,
+          stickers: stickersData,
+          images: imagesData,
+          collaborators,
+          entryName,
+          locationName,
+          // userId: existingData.userId, // Ensure userId is not overwritten
+        };
+  
+        await updateDoc(entryRef, entryContent);
+        if (updateEntryName) {
+          updateEntryName(entryId, entryName);
+        }
+        Alert.alert('Success', 'Entry content saved successfully');
+      } else {
+        Alert.alert('Error', 'Entry not found.');
       }
-      Alert.alert('Success', 'Entry content saved successfully');
     } catch (error) {
       console.error('Failed to save entry content', error);
       Alert.alert('Error', 'Failed to save entry content');
     }
-  };
+  };  
 
 
   const handleAddCollaborator = async () => {

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, Alert, FlatList } from 'react-native';
 import Constants from 'expo-constants';
 import { auth, db } from '../App'; 
-import { doc, addDoc, getDoc, getDocs, query, collection, where, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, addDoc, getDocs, query, collection, where, updateDoc, deleteDoc } from 'firebase/firestore';
 import JournalHeader from './ScreenHeader.js';
 import NewEntry from '../elements/NewEntry.js';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -68,6 +68,11 @@ const Journal = ({ navigation }) => {
   const addOrEditEntry = async () => {
     if (entryName.trim() === '') {
       Alert.alert("Error", "Entry name cannot be empty.");
+      return;
+    }
+
+    if (!location) {
+      Alert.alert("Error", "Location cannot be empty.");
       return;
     }
 
@@ -164,9 +169,8 @@ const Journal = ({ navigation }) => {
           setModalVisible(!modalVisible);
         }}
       >
-        
         <View style={styles.modalView}>
-        <View style={styles.close}>
+          <View style={styles.close}>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Ionicons name="close-outline" size={20} />
             </TouchableOpacity>
@@ -181,9 +185,14 @@ const Journal = ({ navigation }) => {
           <GooglePlacesAutocomplete
             placeholder="Search for a location"
             onPress={(data, details = null) => {
-              const { lat, lng } = details.geometry.location;
-              setLocation({ latitude: lat, longitude: lng });
-              setLocationName(data.description);
+              if (details) {
+                const { lat, lng } = details.geometry.location;
+                console.log("Selected location:", { lat, lng, description: data.description }); // Add logging
+                setLocation({ latitude: lat, longitude: lng });
+                setLocationName(data.description);
+              } else {
+                console.error("Details are null");
+              }
             }}
             query={{
               key: 'AIzaSyBw2lOAQ7hUSvyEp6WlTpgt2VcsiRgyVfg',
@@ -216,26 +225,27 @@ const Journal = ({ navigation }) => {
           </MapView>
           {editingEntry && (
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={() => {
-                setModalVisible(false);
-                navigation.navigate('JournalEntry', {
-                  entryId: editingEntry.id,
-                  entryName,
-                  locationName,
-                  updateEntryName: updateEntryName
-                });
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate('JournalEntry', {
+                    entryId: editingEntry.id,
+                    entryName,
+                    locationName,
+                    updateEntryName: updateEntryName,
+                  });
                 }}
               >
-              <Text style={styles.buttonText}>Open Entry</Text>
+                <Text style={styles.buttonText}>Open Entry</Text>
               </TouchableOpacity>
-              
-                <TouchableOpacity style={styles.button} onPress={deleteEntry}>
+              <TouchableOpacity style={styles.button} onPress={deleteEntry}>
                 <Text style={styles.buttonText}>Delete Entry</Text>
               </TouchableOpacity>
             </View>
           )}
           <TouchableOpacity style={styles.button} onPress={addOrEditEntry}>
-            <Text style={styles.buttonText}>{editingEntry ? "Save Changes" : "Save Entry"}</Text>
+            <Text style={styles.buttonText}>{editingEntry ? 'Save Changes' : 'Save Entry'}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -261,7 +271,7 @@ const styles = StyleSheet.create({
   },
   entryIcon: {
     marginRight: 10,
-    color: '#385e8a'
+    color: '#385e8a',
   },
   entryText: {
     fontSize: 25,

@@ -1,18 +1,15 @@
-// app/tabs/_layout.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, StyleSheet} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Correct import statement
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Journal from '../screens/Journal';
 import Map from '../screens/Map';
-import NewTrips from '../screens/NewTrips';
 import Notifications from '../screens/Notifications';
 
 const Tab = createBottomTabNavigator();
 
 const TabsLayout = () => {
   return (
-       <Tab.Navigator 
+    <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarStyle: {
           position: 'absolute',
@@ -27,9 +24,9 @@ const TabsLayout = () => {
             case 'Map':
               iconName = 'location-outline';
               break;
-            //case 'New Trips':
-              //iconName = 'airplane-outline';
-             //break;
+            /*case 'NewTrips':
+              iconName = 'airplane-outline';
+              break; */
             case 'Notifications':
               iconName = 'notifications-outline';
               break;
@@ -44,13 +41,10 @@ const TabsLayout = () => {
       })}
     >
       <Tab.Screen name="Journal" component={Journal} options={{ headerShown: false }} />
-      <Tab.Screen name="Map" component={Map} options={{ headerShown: false }}/>
-      {/*<Tab.Screen name="New Trips" component={NewTrips} options={{ headerShown: false }}/>*/}
-      <Tab.Screen name="Notifications" component={Notifications}options={{ headerShown: false }} />
+      <Tab.Screen name="Map" component={Map} options={{ headerShown: false }} />
+      <Tab.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
     </Tab.Navigator>
-   
   );
 };
-
 
 export default TabsLayout;

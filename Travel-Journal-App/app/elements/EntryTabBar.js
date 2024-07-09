@@ -144,10 +144,10 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
             useNativeLayout={false}
           />
           <View style={styles.buttonContainer}>
-            <Button title="Select Color" onPress={handleColorSelect} color="#6200EE" />
+            <Button title="Select Color" onPress={handleColorSelect} color="#98B6D0" />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={() => { setColorModalVisible(false) }} color="#6200EE" />
+            <Button title="Cancel" onPress={() => { setColorModalVisible(false) }} color="#98B6D0" />
           </View>
         </View>
       </Modal>
@@ -173,10 +173,10 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
             useNativeLayout={false}
           />
           <View style={styles.buttonContainer}>
-            <Button title="Select Text Color" onPress={handleTextColorSelect} color="#6200EE" />
+            <Button title="Select Text Color" onPress={handleTextColorSelect} color="#98B6D0" />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={() => { setTextColorModalVisible(false) }} color="#6200EE" />
+            <Button title="Cancel" onPress={() => { setTextColorModalVisible(false) }} color="#98B6D0" />
           </View>
         </View>
       </Modal>
@@ -204,10 +204,10 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
             ))}
           </ScrollView>
           <View style={styles.buttonContainer}>
-            <Button title="Select Sticker" onPress={handleStickerSelect} color="#6200EE" />
+            <Button title="Select Sticker" onPress={handleStickerSelect} color="#98B6D0" />
           </View>
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={() => { setStickerModalVisible(false) }} color="#6200EE" />
+            <Button title="Cancel" onPress={() => { setStickerModalVisible(false) }}  color="#98B6D0"/>
           </View>
         </View>
       </Modal>
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   iconContainer: {
-    margin: 10,
+    margin: 5,
   },
 });
 

@@ -132,7 +132,7 @@ const JournalEntry = ({ navigation, route }) => {
   };
 
   const addImage = (uri) => {
-    console.log('Adding image with URI:', uri);
+    console.log('DEBUGGING')
     const image = {
       uri,
       pan: new Animated.ValueXY({ x: 10, y: -500 }), // Adjust initial position here

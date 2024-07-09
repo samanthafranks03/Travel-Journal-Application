@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, LogBox} from 'react-native';
 import Constants from 'expo-constants';
 import {createStackNavigator} from '@react-navigation/stack';
 import LogIn from './screens/LogIn.js'
@@ -12,10 +12,15 @@ import ScreenHeader from './screens/ScreenHeader.js'
 import { NavigationContainer } from '@react-navigation/native';
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from 'firebase/auth';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+// Ignore specific warning messages
+LogBox.ignoreLogs(['Warning: ...']);
+
+// Ignore all log notifications
+LogBox.ignoreAllLogs();
 
 const firebaseConfig = {
   apiKey: "AIzaSyAnlTM5qYrY6hzimSND8E3SnuWFwtOCj38",

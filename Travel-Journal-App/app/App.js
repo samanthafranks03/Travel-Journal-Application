@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, LogBox} from 'react-native';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Welcome from './screens/Welcome';
 import LogIn from './screens/LogIn';
 import SignUp from './screens/SignUp';
 import Profile from './screens/Profile';
@@ -15,6 +15,13 @@ import Journal from './screens/Journal';
 import JournalEntry from './screens/JournalEntry';
 import TabsLayout from './(tabs)/_layout';
 import ScreenHeader from './screens/ScreenHeader';
+
+// Ignore specific warning messages
+//LogBox.ignoreLogs(['Warning: ...']);
+
+// Ignore all log notifications
+//LogBox.ignoreAllLogs();
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAnlTM5qYrY6hzimSND8E3SnuWFwtOCj38',
@@ -38,12 +45,13 @@ function App() {
   return (
     <View style={styles.container}>
       <NavigationContainer independent={true}>
-        <RootStack.Navigator initialRouteName="LogIn">
+        <RootStack.Navigator initialRouteName="Welcome">
           <RootStack.Screen name="LogIn" component={LogIn} options={{ headerShown: false }} />
           <RootStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
           <RootStack.Screen name="Tabs" component={TabsLayout} options={{ headerShown: false }} />
           <RootStack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
           <RootStack.Screen name="Journal" component={Journal} options={{ headerShown: false }} />
+          <RootStack.Screen name="Welcome" component={Welcome} options={{ headerShown: false }} />
           <RootStack.Screen name="JournalEntry" component={JournalEntry} options={{ headerShown: false }} />
         </RootStack.Navigator>
       </NavigationContainer>

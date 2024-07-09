@@ -118,10 +118,10 @@ const LogIn = ({ navigation }) => {
         </View>
 
         <TouchableOpacity style={styles.forgotPassButton} onPress={handleForgotPassword}>
-          <Text>Forgot Password?</Text>
+          <Text>Forgot password?</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleLogIn} style={styles.loginButton}>
-          <Text style={styles.loginText}>LOGIN</Text>
+          <Text style={styles.loginText}>Log in</Text>
         </TouchableOpacity>
         <View style={styles.signUpText}>
           <Text>Don't have an account? </Text>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     width: "80%",
-    backgroundColor: "#98B6D0",
+    backgroundColor: "#8da1a6",
     borderRadius: 25,
     height: 50,
     alignItems: "center",

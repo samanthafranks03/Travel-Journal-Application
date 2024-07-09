@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Alert, Image, Animated, PanResponder} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,7 +16,7 @@ const JournalEntry = ({ navigation, route }) => {
   const [username, setUsername] = useState('');
   const [collaborators, setCollaborators] = useState([]);
   const [textInputs, setTextInputs] = useState([]);
-  const [textBoxColor, setTextBoxColor] = useState('grey');
+  const [textBoxColor, setTextBoxColor] = useState('#d3d3d3');
   const [textColor, setTextColor] = useState('black');
   const [stickers, setStickers] = useState([]);
   const [images, setImages] = useState([]);
@@ -30,7 +29,7 @@ const JournalEntry = ({ navigation, route }) => {
         if (docSnap.exists()) {
           const {
             textInputs = [],
-            textBoxColor = 'grey',
+            textBoxColor = '#d3d3d3',
             textColor = 'black',
             stickers = [],
             images = [],
@@ -270,6 +269,7 @@ const JournalEntry = ({ navigation, route }) => {
   };
 
   const renderImage = (image, index) => {
+    console.log('Rendering image:', image);
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
@@ -449,6 +449,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 10,
+
   },
   sticker: {
     margin: 5,
@@ -459,13 +460,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 10,
-    position: 'absolute', // Ensuring it is on top
-    top: 0,
   },
   image: {
-    width: 100,
-    height: 100,
-    margin: 5,
+    width:'100%'
   },
   modalView: {
     margin: 20,

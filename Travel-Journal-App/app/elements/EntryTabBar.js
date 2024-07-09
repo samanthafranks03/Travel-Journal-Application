@@ -1,36 +1,42 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView, Image } from 'react-native';
+import React, { useState, useRef} from 'react';
+import { View, StyleSheet, TouchableOpacity, Modal, ActivityIndicator, Button, ScrollView, Image, PanResponder, Animated} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker'
 import ColorPicker from 'react-native-wheel-color-picker';
 
-const openImageLibrary = (setSelectedImage) => {
-  const options = {
-    mediaType: 'photo',
-    quality: 1,
-  };
-
-  ImagePicker.launchImageLibraryAsync(options, (response) => {
-    if (response.didCancel) {
-      console.log('User cancelled image picker');
-    } else if (response.error) {
-      console.log('ImagePicker Error: ', response.error);
-    } else if (response.customButton) {
-      console.log('User tapped custom button: ', response.customButton);
-    } else {
-      setSelectedImage(response.assets[0].uri);
-    }
-  });
-};
-
 const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTextBox, addImage }) => {
   const [colorModalVisible, setColorModalVisible] = useState(false);
   const [textColorModalVisible, setTextColorModalVisible] = useState(false);
   const [stickerModalVisible, setStickerModalVisible] = useState(false);
-  const [selectedColor, setSelectedColor] = useState('#ffffff');
+  const [selectedColor, setSelectedColor] = useState('#d3d3d3');
   const [selectedTextColor, setSelectedTextColor] = useState('#ffffff');
   const [selectedIcon, setSelectedIcon] = useState(null);
+  const [image, setImage] = useState(null);
+  const pan = useRef(new Animated.ValueXY()).current;
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], { useNativeDriver: false }),
+      onPanResponderRelease: () => {
+        pan.extractOffset();
+      },
+    })
+  ).current;
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const handleColorChange = (color) => {
     setSelectedColor(color);
@@ -96,33 +102,38 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
 
   return (
     <View style={styles.container}>
+      {/* Draggable Image */}
+      {image && (
+        <Animated.View
+          style={[styles.draggableContainer, { transform: [{ translateX: pan.x }, { translateY: pan.y }] }]}
+          {...panResponder.panHandlers}
+        >
+          <Image source={{ uri: image }} style={styles.image} />
+        </Animated.View>
+      )}
+
+      {/* Bottom Tab Bar */}
       <View style={styles.header}>
-        {/* Change Text Box Color */}
         <TouchableOpacity onPress={() => setColorModalVisible(true)}>
           <MaterialIcons size={20} name="format-color-fill" />
         </TouchableOpacity>
 
-        {/* Change Text Color */}
         <TouchableOpacity onPress={() => setTextColorModalVisible(true)}>
           <MaterialIcons size={20} name="format-color-text" />
         </TouchableOpacity>
 
-        {/* Add Text Box */}
         <TouchableOpacity onPress={addNewTextBox}>
           <MaterialIcons size={40} name="add-circle-outline" />
         </TouchableOpacity>
 
-        {/* Add Sticker */}
         <TouchableOpacity onPress={() => setStickerModalVisible(true)}>
           <MaterialCommunityIcons size={20} name="sticker-emoji" />
         </TouchableOpacity>
 
-        {/* Add Image */}
-        <TouchableOpacity onPress={() => openImageLibrary(handleImageSelect)}>
+        <TouchableOpacity onPress={pickImage}>
           <MaterialCommunityIcons size={20} name='image-outline' />
         </TouchableOpacity>
       </View>
-
       {/* Color Picker for Text Box */}
       <Modal
         animationType="slide"
@@ -151,7 +162,6 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
           </View>
         </View>
       </Modal>
-
       {/* Color Picker for Text */}
       <Modal
         animationType="slide"
@@ -180,7 +190,6 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
           </View>
         </View>
       </Modal>
-
       {/* Sticker Picker */}
       <Modal
         animationType="slide"
@@ -217,17 +226,22 @@ const EntryTabBar = ({ changeTextBoxColor, changeTextColor, addSticker, addNewTe
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'white',
   },
   header: {
+    position: 'absolute',
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
     paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    backgroundColor: 'white',
   },
   colorPickerContainer: {
     flex: 1,
@@ -256,6 +270,16 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     margin: 5,
+  },
+  draggableContainer: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
   },
 });
 

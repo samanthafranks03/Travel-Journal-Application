@@ -14,6 +14,7 @@ const TabsLayout = () => {
       screenOptions={({ route }) => ({
         tabBarStyle: {
           position: 'absolute',
+          height: 50
         },
         tabBarIcon: ({ color, size }) => {
           let iconName;
@@ -37,7 +38,7 @@ const TabsLayout = () => {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#98B6D0',
+        tabBarActiveTintColor: '#8da1a6',
         tabBarInactiveTintColor: '#BDBBBB',
       })}
     >

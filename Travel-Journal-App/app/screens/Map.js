@@ -40,8 +40,8 @@ const Map = () => {
         initialRegion={{
           latitude: entries.length > 0 ? entries[0].location.latitude : 37.78825,
           longitude: entries.length > 0 ? entries[0].location.longitude : -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 50,
+          longitudeDelta: 50,
         }}
       >
         {entries.map((entry) => (

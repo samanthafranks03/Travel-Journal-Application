@@ -167,7 +167,7 @@ const Profile = ({ navigation }) => {
           </View>
 
           <TouchableOpacity onPress={() => { navigation.navigate('LogIn') }} style={styles.loginButton}>
-            <Text style={styles.logOutText}>Log Out</Text>
+            <Text style={styles.logOutText}>Log out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -187,14 +187,14 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 60,
+    height: 65,
     width: '100%',
     padding: 15,
-    backgroundColor: '#e9e9e9',
+    backgroundColor: 'white',
     justifyContent: 'space-between',
   },
   profileText: {
-    fontSize: 20,
+    fontSize: 28,
     textAlign: 'center',
   },
   doneButton: {
@@ -232,12 +232,11 @@ const styles = StyleSheet.create({
   },
   logOutText: {
     color: 'black',
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 17,
   },
   loginButton: {
     width: "80%",
-    backgroundColor: "#98B6D0",
+    backgroundColor: "#8da1a6",
     borderRadius: 25,
     height: 50,
     alignItems: "center",

@@ -271,12 +271,12 @@ const styles = StyleSheet.create({
   },
   entryIcon: {
     marginRight: 10,
-    color: '#385e8a',
+    color: '#4f6b6f',
   },
   entryText: {
     fontSize: 25,
     fontFamily: 'Roboto',
-    color: '#385e8a',
+    color: '#4f6b6f',
   },
   modalView: {
     flex: 1,
@@ -342,13 +342,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'column',
+    width: '100%'
   },
   button: {
-    backgroundColor: '#98B6D0',
+    backgroundColor: '#8da1a6',
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
-    width: 150,
+    width: '100%',
     alignItems: 'center',
   },
   buttonText: {

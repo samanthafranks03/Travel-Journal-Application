@@ -154,7 +154,7 @@ const SignUp = ({ navigation }) => {
         </View>
 
         <TouchableOpacity onPress={handleSignUp} style={styles.signUpButton}>
-          <Text style={styles.signUpText}>Sign Up</Text>
+          <Text style={styles.signUpText}>Sign up</Text>
         </TouchableOpacity>
 
         <View style={styles.loginText}>
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     width: "80%",
-    backgroundColor: "#98B6D0",
+    backgroundColor: "#8da1a6",
     borderRadius: 25,
     height: 50,
     alignItems: "center",

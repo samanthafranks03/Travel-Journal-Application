@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert, FlatList } from 'react
 import { collection, query, where, getDocs, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../App';
 import NotificationsHeader from './ScreenHeader.js';
+import Constants from 'expo-constants';
 
 const fetchUsername = async (userId) => {
   const userRef = doc(db, 'users', userId);
@@ -111,9 +112,9 @@ const Notifications = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
-    padding: 20,
+    paddingTop: Constants.statusBarHeight,
+    flex: 1,
   },
   notificationCard: {
     backgroundColor: '#ffffff',

@@ -1,17 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Image, Alert, Animated, PanResponder, KeyboardAvoidingView} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Constants from 'expo-constants';
-import { auth, db } from '../App.js';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-=======
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Alert, Image, Animated, PanResponder} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
 import { auth, db } from '../App';
-import { doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs } from 'firebase/firestore';
->>>>>>> origin/collab-notifications
+import {doc, getDoc, updateDoc, addDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import EntryTabBar from '../elements/EntryTabBar.js';
 
 const JournalEntry = ({ navigation, route }) => {
@@ -68,7 +61,6 @@ const JournalEntry = ({ navigation, route }) => {
     loadEntryContent();
   }, [entryId]);
 
-<<<<<<< HEAD
   const saveEntryContent = async () => {
     try {
       // Extracting the necessary data from stickers and images state
@@ -103,7 +95,15 @@ const JournalEntry = ({ navigation, route }) => {
       await updateDoc(doc(db, 'entries', entryId), entryContent, { name: entryName });
       if (updateEntryName) {
         updateEntryName(entryId, entryName);
-=======
+      }
+      Alert.alert('Success', 'Entry content saved successfully');
+    } catch (error) {
+      console.error('Failed to save entry content', error);
+      Alert.alert('Error', 'Failed to save entry content');
+    }
+  };
+
+
   const handleAddCollaborator = async () => {
     if (username.trim()) {
       try {
@@ -143,41 +143,12 @@ const JournalEntry = ({ navigation, route }) => {
       } catch (error) {
         console.error('Error adding collaborator:', error);
         Alert.alert('Error', 'Failed to add collaborator.');
->>>>>>> origin/collab-notifications
+
       }
     }
   };
 
-  const saveEntryContent = async () => {
-    try {
-      const entryRef = doc(db, 'entries', entryId);
-      const entryDoc = await getDoc(entryRef);
-      if (entryDoc.exists()) {
-        const entryContent = {
-          ...entryDoc.data(),
-          textInputs,
-          textBoxColor,
-          textColor,
-          stickers,
-          images,
-          collaborators,
-          entryName,
-          locationName,
-        };
-        await updateDoc(entryRef, entryContent);
-        if (updateEntryName) {
-          updateEntryName(entryId, entryName);
-        }
-        Alert.alert('Success', 'Entry content saved successfully');
-      } else {
-        Alert.alert('Error', 'Entry not found.');
-      }
-    } catch (error) {
-      console.error('Failed to save entry content', error);
-      Alert.alert('Error', 'Failed to save entry content');
-    }
-  };
-
+  
   const renderCollaborator = ({ item }) => (
     <View style={styles.collaboratorItem}>
       <Text>{item}</Text>

@@ -10,3 +10,9 @@ A mobile travel journal application built with React Native and Firebase. The ap
 # Technologies Used
 * React Native: Framework for building cross-platform mobile applications.
 * Firebase: Backend services for user authentication, database storage, and real-time updates.
+
+# See here for a demo of our app
+* 
+https://github.com/user-attachments/assets/6cddc3bc-5a9a-424b-97c2-3b3cc5ddba89
+
+

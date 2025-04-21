@@ -1,5 +1,4 @@
 # Mobile Travel Journal App
-
 A mobile travel journal application built with React Native and Firebase. The app allows users to create interactive journal entries, explore a map, and personalize their posts with images and stickers.
 
 # Features
@@ -12,7 +11,9 @@ A mobile travel journal application built with React Native and Firebase. The ap
 * Firebase: Backend services for user authentication, database storage, and real-time updates.
 
 # See here for a demo of our app
-* 
-https://github.com/user-attachments/assets/6cddc3bc-5a9a-424b-97c2-3b3cc5ddba89
+https://github.com/user-attachments/assets/4748d3c8-598a-47af-818e-371f98b55981
+
+
+
 
 
